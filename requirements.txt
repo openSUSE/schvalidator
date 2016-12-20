@@ -1,0 +1,5 @@
+# Requirements file for pip
+# Use it with pip install -r requirements.txt
+
+lxml
+docopt

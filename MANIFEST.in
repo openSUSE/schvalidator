@@ -1,0 +1,9 @@
+
+graft doc
+graft test
+prune doc/_build
+
+include ChangeLog
+include README*
+
+global-exclude *.py[cod] __pycache__ *.so *.dylib
