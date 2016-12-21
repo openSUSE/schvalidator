@@ -47,12 +47,11 @@ def main(cliargs=None):
     """
     try:
         args = parsecli(cliargs)
-        if args['XMLFILE'] is None:
-            print(clidoc)
-            raise ProjectFilesNotFoundError("Need a XML file.")
-        if args['--schema'] is None:
-            print(clidoc)
-            raise ProjectFilesNotFoundError("Need a Schematron schema.")
+        for f, msg in ((args['XMLFILE'], "Need a XML file."),
+                       (args['--schema'], "Need a Schematron schema.")):
+            if f is None:
+                print(clidoc)
+                raise ProjectFilesNotFoundError(msg)
         return process(args)
 
     except (ProjectFilesNotFoundError) as error:

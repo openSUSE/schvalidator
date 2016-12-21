@@ -23,22 +23,25 @@ from lxml.isoschematron import Schematron
 import os
 
 # Common namespaces
-NS=dict(svrl="http://purl.oclc.org/dsdl/svrl",
-        xs="http://www.w3.org/2001/XMLSchema",
-        sch="http://www.ascc.net/xml/schematron",
-        iso="http://purl.oclc.org/dsdl/schematron",
-        d="http://docbook.org/ns/docbook"
-        )
+NS = dict(svrl="http://purl.oclc.org/dsdl/svrl",
+          xs="http://www.w3.org/2001/XMLSchema",
+          sch="http://www.ascc.net/xml/schematron",
+          iso="http://purl.oclc.org/dsdl/schematron",
+          d="http://docbook.org/ns/docbook"
+          )
 
 
 class NSElement(object):
     def __init__(self, namespace, prefix=None):
         self.ns = namespace
         self.prefix = prefix
+
     def __call__(self, name):
         return etree.QName(self.ns, name)
+
     def __getattr__(self, name):
         return self(name)
+
     def __repr__(self):
         if self.prefix is None:
             result = "%s(%s)" % (self.__class__.__name__, self.ns)
@@ -75,13 +78,11 @@ def validate_sch(schema, xmlfile, phase=None, xmlparser=None):
 def check_args(args):
     """Checks the arguments for consistency"""
     log.info("Consistency check for args: %s", args)
-    if not os.path.exists(args['XMLFILE']):
-        raise ProjectFilesNotFoundError("XML file not found",
-                                        args['XMLFILE'])
-    if not os.path.exists(args['--schema']):
-        raise ProjectFilesNotFoundError("Schematron file "
-                                        "does not exist!",
-                                        args['--schema'], )
+
+    for f in [args['XMLFILE'], args['--schema']]:
+        if not os.path.exists(f):
+            raise ProjectFilesNotFoundError("File not found", f)
+
 
 def extractrole(fa):
     """Try to extract ``role`` attributes either in the ``svrl:failed-assert''
@@ -117,11 +118,13 @@ def process_result_svrl(report):
         # The ``role`` attribute contains contains the log level
         level = role2level(extractrole(fa))
 
-        schlog.log(level, "Message %i\n"
+        schlog.log(level,
+                   "Message %i\n"
                    "\tLocation: %r\n"
                    "\t%s\n"
                    "%s",
                    idx, loc, text, "-"*20)
+
 
 def process(args):
     """Process the validation and the result
@@ -131,7 +134,6 @@ def process(args):
                                       args['XMLFILE'],
                                       phase=args['--phase'],
                                       )
-    report = schematron.validation_report
     reportfile = args['--report']
 
     if not result:
@@ -143,7 +145,7 @@ def process(args):
             log.info("Wrote Schematron validation report to %r", reportfile)
         else:
             schlog.debug(report)
-        process_result_svrl(report)
+        process_result_svrl(schematron.validation_report)
 
         schlog.fatal("Validation failed!")
         return 200
