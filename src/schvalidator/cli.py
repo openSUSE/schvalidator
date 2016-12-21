@@ -21,11 +21,11 @@ Validates XML files with Schematron schemas
 
 Usage:
     schvalidator [-h | --help]
-    schvalidator [-vvv | -vv | -v] [options] --schema SCHEMA XMLFILE
+    schvalidator [-v ...] [options] --schema SCHEMA XMLFILE
 
 Options:
     -h, --help      Shows this help
-    -v, -vv, -vv    Raise verbosity level
+    -v              Raise verbosity level
     --version       Prints the version
     --report REPORTFILE
                     save output of Schematron validation to REPORTFILE

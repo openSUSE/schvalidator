@@ -33,6 +33,16 @@ from schvalidator.cli import parsecli
     '--schema': 'schema.sch',
     'XMLFILE':  'a.xml'}
    ),
+  (['-vv', '--schema', 'schema.sch', 'a.xml'],
+   {'-v': 2,
+    '--schema': 'schema.sch',
+    'XMLFILE':  'a.xml'}
+   ),
+  (['-vvv', '--schema', 'schema.sch', 'a.xml'],
+   {'-v': 3,
+    '--schema': 'schema.sch',
+    'XMLFILE':  'a.xml'}
+   ),
   (['--report', 'report.svrl', '--schema', 'schema.sch', 'a.xml'],
    {'--report': 'report.svrl',
     '--schema': 'schema.sch',
