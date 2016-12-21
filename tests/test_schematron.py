@@ -22,10 +22,12 @@ import pytest
 import sys
 from unittest.mock import Mock
 
+from schvalidator import log
+from schvalidator.log import logging
 import schvalidator.schematron
 from schvalidator.schematron import (NS, NSElement,
                                      extractrole,
-                                     process,
+                                     process, process_result_svrl,
                                      svrl, validate_sch)
 
 
@@ -105,8 +107,22 @@ def test_extractrole_empty():
 
 
 def test_process_result_svrl(caplog):
+    xmltree = etree.XML("""<svrl:schematron-output
+    xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+   <svrl:failed-assert role="info"
+    test="@version = '5.0'"
+    location="/*[local-name()='article' and namespace-uri()='http://docbook.org/ns/docbook']">
+    <svrl:text>bla</svrl:text>
+  </svrl:failed-assert>
+</svrl:schematron-output>""")
 
     process_result_svrl(xmltree)
+    assert caplog.text
+    for record in caplog.records:
+        assert record.levelname == 'INFO'
+        assert record.name == 'schematron'
+        assert record.getMessage()
+        assert record.funcName == process_result_svrl.__name__
 
 
 def test_NSElement():

@@ -7,6 +7,7 @@ coverage
 codecov
 codeclimate-test-reporter
 pytest-cov
+pytest-catchlog
 
 # sphinx-rtd-theme
 # See https://github.com/Syntaf/travis-sphinx/pull/5
