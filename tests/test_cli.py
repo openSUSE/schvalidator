@@ -17,10 +17,13 @@
 # you may find current contact information at www.suse.com
 
 
+from lxml import etree
 import pytest
 from unittest.mock import patch
 
+import schvalidator
 from schvalidator.cli import parsecli
+from schvalidator.exceptions import ProjectFilesNotFoundError
 
 
 @pytest.mark.parametrize('cli,expected', [
@@ -58,3 +61,84 @@ def test_parsecli(cli, expected):
     result = parsecli(cli)
     # Create set difference and only compare this with the expected dictionary
     assert {item: result.get(item, None) for item in expected} == expected
+
+
+def test_main_mock_parsecli(monkeypatch):
+    """ """
+    def mock_parsecli(cliargs=None):
+        return {'--schema': None,
+                'XMLFILE':  None,
+                }
+
+    monkeypatch.setattr(schvalidator,
+                        'parsecli',
+                        mock_parsecli)
+    with pytest.raises((ProjectFilesNotFoundError, SystemExit)):
+        schvalidator.main()
+
+
+def test_main_mock_parsecli_process(monkeypatch):
+    """ """
+    def mock_parsecli(cliargs=None):
+        return {'--schema': "s.sch",
+                '--phase': None,
+                'XMLFILE':  "a.xml",
+                }
+    def mock_process(args):
+        return 100
+
+    monkeypatch.setattr(schvalidator,
+                        'parsecli',
+                        mock_parsecli)
+    monkeypatch.setattr(schvalidator,
+                        'process',
+                        mock_process)
+    assert schvalidator.main() == 100
+
+
+@pytest.mark.parametrize("excpt,data", [
+    (etree.XMLSyntaxError, ["msg", "x", 1, 1]),
+    (etree.XSLTApplyError, ["msg"]),
+])
+def test_main_raise_etree(monkeypatch, excpt, data):
+    """ """
+    def mock_parsecli(cliargs=None):
+        return {'--schema': "s.sch",
+                '--phase': None,
+                'XMLFILE':  "a.xml",
+                }
+    def mock_process(args):
+        raise excpt(*data)
+
+    monkeypatch.setattr(schvalidator,
+                        'parsecli',
+                        mock_parsecli)
+    monkeypatch.setattr(schvalidator,
+                        'process',
+                        mock_process)
+
+    with pytest.raises((excpt, SystemExit)):
+        schvalidator.main()
+
+
+@pytest.mark.parametrize("excpt", [
+    FileNotFoundError, OSError,
+])
+def test_main_raise_OSError(monkeypatch, excpt):
+    def mock_parsecli(cliargs=None):
+        return {'--schema': "s.sch",
+                '--phase': None,
+                'XMLFILE':  "a.xml",
+                }
+    def mock_process(args):
+        raise excpt()
+
+    monkeypatch.setattr(schvalidator,
+                        'parsecli',
+                        mock_parsecli)
+    monkeypatch.setattr(schvalidator,
+                        'process',
+                        mock_process)
+
+    with pytest.raises((excpt, SystemExit)):
+        schvalidator.main()
