@@ -48,7 +48,6 @@ def parsecli(cliargs=None):
     version = "%s %s" % (__package__, __version__)
     args = docopt(__doc__, argv=cliargs, version=version)
     # verbose = args['-v'] if args['-v'] else None
-    verbose = args['-v']
-    setloglevel(verbose)
+    setloglevel(args['-v'])
     log.debug("Got the following options and arguments: %s", args)
     return args
