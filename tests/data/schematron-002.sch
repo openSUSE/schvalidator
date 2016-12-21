@@ -8,17 +8,12 @@
 
   <sch:ns prefix="d" uri="http://docbook.org/ns/docbook"/>
 
-  <sch:pattern id="all.general">
-    <sch:title>General Rules</sch:title>
-    <sch:rule context="/d:article">
-      <sch:assert test="d:warning/d:title">
-        The warning element has no title!
+  <sch:pattern>
+    <sch:title>Rules</sch:title>
+    <sch:rule context="/*">
+      <sch:assert test="@version and @xml:id">
+        Root element should have version and xml:id attributes!
       </sch:assert>
-    </sch:rule>
-    <sch:rule context="/d:article">
-      <sch:report test="not(d:warning/d:warning)">
-        There shouldn't be a warning inside another warning
-      </sch:report>
     </sch:rule>
   </sch:pattern>
 </sch:schema>
