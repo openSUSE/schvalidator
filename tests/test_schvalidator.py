@@ -20,6 +20,7 @@ import docopt
 import os.path
 import pytest
 import sys
+from unittest.mock import patch
 
 import schvalidator
 
@@ -29,6 +30,20 @@ def test_main(capsys):
     with pytest.raises(SystemExit):
         path = os.path.dirname(os.path.realpath(__file__)) + "/../src/schvalidator/__main__.py"
         exec(compile(open(path).read(), path, "exec"), {}, {"__name__": "__main__"})
+
+
+@pytest.mark.parametrize('schema,xmlfile', [
+    (None, "foo.xml"),
+    ("schema.sch", None),
+])
+def test_main_with_exception(monkeypatch, schema, xmlfile):
+
+    # Patching etree.parse
+    monkeypatch.setattr('schvalidator.cli.parsecli',
+                        {'--schema': schema, 'XMLFILE': xmlfile})
+
+    with pytest.raises(SystemExit):
+        schvalidator.main(["", "--schema", "schema.sch"])
 
 
 def test_version(capsys):
