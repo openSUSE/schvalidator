@@ -19,3 +19,9 @@ exclude_paths:
     - test/**
     - dist/
     - build/
+    - setup.cfg
+    - MANIFEST.in
+    - LICENSE
+    - *.txt
+    - *.rst
+
