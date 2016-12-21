@@ -43,7 +43,8 @@ def pytest_generate_tests(metafunc):
             try:
                 schematron = TESTDIR.listdir("*-%s.sch" % number)[0]
             except IndexError:
-                schematron = ''
+                pytest.fail("Skipping XML file %r as there is no "
+                            "corresponding Schematron file." % test.purebasename)
             try:
                 svrl = TESTDIR.listdir("*-%s.svrl" % number)[0]
             except IndexError:
