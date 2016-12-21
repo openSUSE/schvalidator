@@ -17,13 +17,11 @@
 # you may find current contact information at www.suse.com
 
 import os.path
-import logging
 from lxml import etree
 import pytest
 import sys
 from unittest.mock import Mock
 
-from schvalidator.log import setloglevel
 import schvalidator.schematron
 from schvalidator.schematron import (NS, NSElement,
                                      extractrole,
@@ -106,20 +104,9 @@ def test_extractrole_empty():
     assert resultrole is None
 
 
-def test_xml(schtestcase):
-    """Run one test case"""
-    xmlfile, schema, svrl = schtestcase
-    setloglevel(logging.NOTSET)
+def test_process_result_svrl(caplog):
 
-    result, schematron = validate_sch(str(schema), str(xmlfile))
-    report = schematron.validation_report
-    svrltree = etree.parse(str(svrl))
-
-    xpathexpr = ["count(//svrl:failed-assert)"]
-    for expr in xpathexpr:
-        expected = svrltree.xpath(expr, namespaces=NS)
-        result = report.xpath(expr, namespaces=NS)
-        assert expected == result
+    process_result_svrl(xmltree)
 
 
 def test_NSElement():
