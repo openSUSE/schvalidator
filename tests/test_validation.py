@@ -23,7 +23,8 @@ import pytest
 import sys
 
 from schvalidator.log import setloglevel
-from schvalidator.schematron import NS, svrl, validate_sch
+from schvalidator.schematron import (NS, NSElement,
+                                     svrl, validate_sch)
 
 
 def test_xml(schtestcase):
@@ -40,3 +41,13 @@ def test_xml(schtestcase):
         expected = svrltree.xpath(expr, namespaces=NS)
         result = report.xpath(expr, namespaces=NS)
         assert expected == result
+
+
+def test_NSElement():
+    foo = etree.QName("ns", "foo")
+    element = NSElement("ns")
+    assert element.prefix is None
+    assert element.ns == "ns"
+    assert repr(element) == "NSElement(ns)"
+    assert element("foo") == foo
+    assert element.foo == foo
