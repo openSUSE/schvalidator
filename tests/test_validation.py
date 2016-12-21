@@ -21,10 +21,40 @@ import logging
 from lxml import etree
 import pytest
 import sys
+from unittest.mock import Mock
 
 from schvalidator.log import setloglevel
+import schvalidator.schematron
 from schvalidator.schematron import (NS, NSElement,
+                                     process,
                                      svrl, validate_sch)
+
+
+@pytest.mark.parametrize('validation_result,return_value', [
+    (True,  0),
+    (False, 200),
+])
+def test_process(monkeypatch, validation_result, return_value, tmpdir):
+    """Test process() function"""
+    args = {'--schema': None,
+            'XMLFILE':  None,
+            '--phase':  None,
+            '--report': str(tmpdir / "report.svrl"),
+            }
+    def mockreturn(schema, xmlfile, phase=None, xmlparser=None):
+        mock = Mock()
+        mock.validation_report = etree.XML("<root/>").getroottree()
+        return validation_result, mock
+
+    monkeypatch.setattr(schvalidator.schematron,
+                        'check_args',
+                        lambda x: None)
+    monkeypatch.setattr(schvalidator.schematron,
+                        'validate_sch',
+                        mockreturn)
+
+    assert process(args) == return_value
+
 
 
 def test_xml(schtestcase):

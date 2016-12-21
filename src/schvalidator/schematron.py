@@ -83,6 +83,27 @@ def check_args(args):
                                         "does not exist!",
                                         args['--schema'], )
 
+def extractrole(fa):
+    """Try to extract ``role`` attributes either in the ``svrl:failed-assert''
+       or in the preceding sibling ``svrl:fired-rule`` element.
+
+    :param fa: the current `svrl:failed-assert`` element
+    :return: attribute value of ``role``, otherwise None if not found
+    :rtype: str
+    """
+    try:
+        role = list(fa.itersiblings(svrl('fired-rule').text,
+                                    preceding=True)
+                    )[0].attrib.get('role')
+    except IndexError:
+        role = None
+
+    # Overwrite with next role, if needed
+    role = role if fa.attrib.get('role') is None \
+                else fa.attrib.get('role')
+    return role
+
+
 def process(args):
     """Process the validation and the result
     """
@@ -108,29 +129,15 @@ def process(args):
             text = fa[0].text.strip()
             loc = fa.attrib.get('location')
 
-            # Try to extract ``role`` attributes either in the
-            # ``svrl:failed-assert'' or in the preceding sibling
-            # ``svrl:fired-rule`` element.
             # The ``role`` attribute contains contains the log level
-            try:
-                role = list(fa.itersiblings(svrl('fired-rule').text,
-                                            preceding=True)
-                            )[0].attrib.get('role')
-            except IndexError:
-                role = None
-            # Overwrite with next role, if needed
-            role = role if fa.attrib.get('role') is None \
-                        else fa.attrib.get('role')
-            level = role2level(role)
+            level = role2level(extractrole(fa))
 
             schlog.log(level, "Message %i\n"
                       "\tLocation: %r\n"
                       "\t%s\n"
                       "%s",
                       idx, loc, text, "-"*20)
-        schlog.fatal("Failed validation with %i error%s",
-                     idx,
-                     's' if idx > 1 else '')
+        schlog.fatal("Validation failed!")
         return 200
     else:
         root = etree.XML("""<svrl:schematron-output
