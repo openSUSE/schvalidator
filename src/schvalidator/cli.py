@@ -41,28 +41,6 @@ from docopt import docopt
 from .log import log, setloglevel
 
 
-def prepareparams(params):
-    """Convert the list with "NAME=VALUE" entries into
-       a tuple with ('NAME', 'VALUE')
-
-       :param params: a list with "NAME=VALUE" entries
-       :return: a tuple with ('NAME', 'VALUE') entries
-    """
-    result = []
-    if params is None:
-        return result
-    for item in params:
-        try:
-            name, value = item.split('=')
-        except ValueError:
-            log.warning("Parameter %r doesn't adhere to the "
-                        "NAME=VALUE syntax. Skipping.",
-                        item)
-            continue
-        result.append((name.strip(), value.strip()))
-    return result
-
-
 def parsecli(cliargs=None):
     """Parse CLI arguments with docopt
     """
