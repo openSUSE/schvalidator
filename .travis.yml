@@ -22,7 +22,4 @@ script:
 
 after_success:
     - codecov
-
-addons:
-    code_climate:
-        repo_token: 4ec76d4c5acba8dd5d02851c9b08ce0b2facd54f68ca2f97b5c3c02dfbf00913
+    - codeclimate-test-reporter
