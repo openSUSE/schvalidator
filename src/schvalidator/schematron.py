@@ -112,7 +112,7 @@ def process(args):
             # The ``role`` attribute contains contains the log level
             try:
                 role = list(fa.itersiblings(svrl('fired-rule').text, preceding=True))[0].attrib.get('role')
-            except:
+            except IndexError:
                 role = None
             # Overwrite with next role, if needed
             role = role if fa.attrib.get('role') is None \

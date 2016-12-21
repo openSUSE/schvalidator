@@ -36,8 +36,6 @@ Options:
 """
 
 
-# import argparse
-from argparse import Namespace
 from docopt import docopt
 
 from .log import log, setloglevel
