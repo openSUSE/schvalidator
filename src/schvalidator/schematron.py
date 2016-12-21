@@ -65,7 +65,7 @@ def validate_sch(schema, xmlfile, phase=None, xmlparser=None):
                                     )
     doctree = etree.parse(xmlfile, parser=xmlparser)
     log.debug("Schematron validation with file=%r, schema=%r, phase=%r",
-             xmlfile, schema, phase)
+              xmlfile, schema, phase)
     schematron = Schematron(file=schema,
                             phase=phase,
                             store_report=True,
