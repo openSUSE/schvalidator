@@ -26,6 +26,7 @@ from unittest.mock import Mock
 from schvalidator.log import setloglevel
 import schvalidator.schematron
 from schvalidator.schematron import (NS, NSElement,
+                                     extractrole,
                                      process,
                                      svrl, validate_sch)
 
@@ -55,6 +56,54 @@ def test_process(monkeypatch, validation_result, return_value, tmpdir):
 
     assert process(args) == return_value
 
+
+@pytest.mark.parametrize('role', [
+    # (parent, failed-assert, expected)
+    (None, None, None),
+    ('info', None, 'info'),
+    (None, 'info', 'info'),
+    ('info', 'error', 'error'),
+])
+def test_extractrole(role):
+    """ """
+    def roleattr(value):
+        if value:
+            return 'role=%r' % value
+        return ''
+
+    parent, current, expected = role
+    xmltree = etree.XML("""<svrl:schematron-output
+    xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+  <svrl:ns-prefix-in-attribute-values
+        uri="http://docbook.org/ns/docbook" prefix="d"/>
+  <svrl:active-pattern id="all.general" name="General Rules"/>
+  <svrl:fired-rule context="/*" %s/>
+  <svrl:failed-assert %s
+    test="@version = '5.0'"
+    location="/*[local-name()='article' and namespace-uri()='http://docbook.org/ns/docbook']">
+    <svrl:text>bla</svrl:text>
+  </svrl:failed-assert>
+</svrl:schematron-output>
+    """ % (roleattr(parent),
+           roleattr(current)))
+
+    fa = list(xmltree.iter(svrl("failed-assert").text))[0]
+    resultrole = extractrole(fa)
+    assert resultrole == expected
+
+
+def test_extractrole_empty():
+    xmltree = etree.XML("""<svrl:schematron-output
+    xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+   <svrl:failed-assert
+    test="@version = '5.0'"
+    location="/*[local-name()='article' and namespace-uri()='http://docbook.org/ns/docbook']">
+    <svrl:text>bla</svrl:text>
+  </svrl:failed-assert>
+</svrl:schematron-output>""")
+    fa = list(xmltree.iter(svrl("failed-assert").text))[0]
+    resultrole = extractrole(fa)
+    assert resultrole is None
 
 
 def test_xml(schtestcase):
