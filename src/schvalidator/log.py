@@ -23,7 +23,8 @@ Logging setup
 import logging
 import sys
 
-__all__ = ('log', 'role2level', 'setloglevel', 'LOGLEVELS', 'ROLEDICT')
+__all__ = ('log', 'role2level', 'schlog',
+           'setloglevel', 'LOGLEVELS', 'ROLEDICT')
 
 #: ``log`` is the object to use for all log events
 log = logging.getLogger(__file__)

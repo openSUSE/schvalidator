@@ -14,8 +14,18 @@ engines:
     fixme:
         enabled: true
 
+ratings:
+    paths:
+        - "src/schvalidator/**"
+
 exclude_paths:
     - tests/**
     - test/**
-    - dist/
-    - build/
+    - dist/**
+    - build/**
+    - "*.cfg"
+    - "*.in"
+    - "LICENSE"
+    - "*.txt"
+    - "*.rst"
+

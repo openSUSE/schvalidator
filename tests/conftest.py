@@ -19,7 +19,8 @@
 import pytest
 import py
 
-TESTDIR = py.path.local(__file__).dirpath()
+# TESTDIR = py.path.local(__file__).dirpath()
+DATADIR = py.path.local(__file__).parts()[-2] / "data"
 
 
 def pytest_generate_tests(metafunc):
@@ -37,17 +38,20 @@ def pytest_generate_tests(metafunc):
     """
     if 'schtestcase' in metafunc.fixturenames:
         testcases = []
-        allxmltests = TESTDIR.listdir('*.xml')
+        allxmltests = DATADIR.listdir('*.xml')
         for test in allxmltests:
             base, number = test.purebasename.split("-")
             try:
-                schematron = TESTDIR.listdir("*-%s.sch" % number)[0]
+                schematron = DATADIR.listdir("*-%s.sch" % number)[0]
             except IndexError:
-                schematron = ''
+                pytest.fail("XML file %r with no "
+                            "corresponding Schematron file." % test.purebasename)
             try:
-                svrl = TESTDIR.listdir("*-%s.svrl" % number)[0]
+                svrl = DATADIR.listdir("*-%s.svrl" % number)[0]
             except IndexError:
-                svrl = ''
+                pytest.fail("XML file %r with no corresponding "
+                            "report file." %
+                            test.purebasename)
             testcases.append((test, schematron, svrl))
 
         # Generates the pure file names for pytest to identify the test better
