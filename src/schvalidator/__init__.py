@@ -61,7 +61,7 @@ def main(cliargs=None):
     except (etree.XMLSyntaxError,
             etree.XSLTApplyError,
             etree.SchematronParseError) as error:
-        log.fatal(error) # exc_info=error,
+        log.fatal(error)  # exc_info=error,
         sys.exit(20)
 
     except (FileNotFoundError, OSError) as error:
