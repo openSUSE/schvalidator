@@ -64,7 +64,7 @@ def validate_sch(schema, xmlfile, phase=None, xmlparser=None):
                                     no_network=True,
                                     )
     doctree = etree.parse(xmlfile, parser=xmlparser)
-    log.info("Schematron validation with file=%r, schema=%r, phase=%r",
+    log.debug("Schematron validation with file=%r, schema=%r, phase=%r",
              xmlfile, schema, phase)
     schematron = Schematron(file=schema,
                             phase=phase,
@@ -77,8 +77,6 @@ def validate_sch(schema, xmlfile, phase=None, xmlparser=None):
 
 def check_args(args):
     """Checks the arguments for consistency"""
-    log.info("Consistency check for args: %s", args)
-
     for f in [args['XMLFILE'], args['--schema']]:
         if not os.path.exists(f):
             raise ProjectFilesNotFoundError("File not found", f)
@@ -144,7 +142,7 @@ def process(args):
                                                )
             log.info("Wrote Schematron validation report to %r", reportfile)
         else:
-            schlog.debug(report)
+            log.debug(schematron.validation_report)
         process_result_svrl(schematron.validation_report)
 
         schlog.fatal("Validation failed!")
