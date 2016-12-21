@@ -20,8 +20,8 @@ install:
 script:
     - py.test -l -vv --no-cov-on-fail --cov=schvalidator --cov-report=term-missing
 
-# after_success:
-#    - codecov
+after_success:
+    - codecov
 
 addons:
     code_climate:
