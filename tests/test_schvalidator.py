@@ -37,7 +37,6 @@ def test_main(capsys):
     ("schema.sch", None),
 ])
 def test_main_with_exception(monkeypatch, schema, xmlfile):
-
     # Patching etree.parse
     monkeypatch.setattr('schvalidator.cli.parsecli',
                         {'--schema': schema, 'XMLFILE': xmlfile})

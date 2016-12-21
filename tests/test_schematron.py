@@ -31,6 +31,16 @@ from schvalidator.schematron import (NS, NSElement,
                                      svrl, validate_sch)
 
 
+def test_NSElement():
+    foo = etree.QName("ns", "foo")
+    element = NSElement("ns")
+    assert element.prefix is None
+    assert element.ns == "ns"
+    assert repr(element) == "NSElement(ns)"
+    assert element("foo") == foo
+    assert element.foo == foo
+
+
 @pytest.mark.parametrize('validation_result,return_value', [
     (True,  0),
     (False, 200),
@@ -47,9 +57,6 @@ def test_process(monkeypatch, validation_result, return_value, tmpdir):
         mock.validation_report = etree.XML("<root/>").getroottree()
         return validation_result, mock
 
-    monkeypatch.setattr(schvalidator.schematron,
-                        'check_args',
-                        lambda x: None)
     monkeypatch.setattr(schvalidator.schematron,
                         'validate_sch',
                         mockreturn)
@@ -125,11 +132,27 @@ def test_process_result_svrl(caplog):
         assert record.funcName == process_result_svrl.__name__
 
 
-def test_NSElement():
-    foo = etree.QName("ns", "foo")
-    element = NSElement("ns")
-    assert element.prefix is None
-    assert element.ns == "ns"
-    assert repr(element) == "NSElement(ns)"
-    assert element("foo") == foo
-    assert element.foo == foo
+@pytest.mark.parametrize('xmlparser', [
+    None, "xmlparser"
+])
+def test_validate_sch(monkeypatch, xmlparser):
+    def mock_etree_parse(source, parser=None, *, base_url=None):
+        return Mock()
+    def mock_schematron(etree=None, file=None,
+                        include=True, expand=True, include_params={}, expand_params={}, compile_params={}, store_schematron=False, store_xslt=False, store_report=False, phase=None,
+                        error_finder=None):
+        mock = Mock()
+        mock.validate.return_value = True
+        return mock
+
+    monkeypatch.setattr(schvalidator.schematron.etree,
+                        'parse',
+                        mock_etree_parse)
+    monkeypatch.setattr(schvalidator.schematron,
+                        'Schematron',
+                        mock_schematron)
+    result, schematron = validate_sch("fake.sch",
+                                      "fake.xml",
+                                      xmlparser=xmlparser)
+    assert result
+    assert getattr(schematron, 'validate')

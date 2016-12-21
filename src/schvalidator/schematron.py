@@ -75,13 +75,6 @@ def validate_sch(schema, xmlfile, phase=None, xmlparser=None):
     return result, schematron
 
 
-def check_args(args):
-    """Checks the arguments for consistency"""
-    for f in [args['XMLFILE'], args['--schema']]:
-        if not os.path.exists(f):
-            raise ProjectFilesNotFoundError("File not found", f)
-
-
 def extractrole(fa):
     """Try to extract ``role`` attributes either in the ``svrl:failed-assert''
        or in the preceding sibling ``svrl:fired-rule`` element.
@@ -127,7 +120,6 @@ def process_result_svrl(report):
 def process(args):
     """Process the validation and the result
     """
-    check_args(args)
     result, schematron = validate_sch(args['--schema'],
                                       args['XMLFILE'],
                                       phase=args['--phase'],
