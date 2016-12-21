@@ -104,6 +104,25 @@ def extractrole(fa):
     return role
 
 
+def process_result_svrl(report):
+    """Process the report tree
+
+    :param report: tree of :class:`lxml.etree._XSLTResultTree`
+    """
+
+    for idx, fa in enumerate(report.iter(svrl("failed-assert").text), 1):
+        text = fa[0].text.strip()
+        loc = fa.attrib.get('location')
+
+        # The ``role`` attribute contains contains the log level
+        level = role2level(extractrole(fa))
+
+        schlog.log(level, "Message %i\n"
+                   "\tLocation: %r\n"
+                   "\t%s\n"
+                   "%s",
+                   idx, loc, text, "-"*20)
+
 def process(args):
     """Process the validation and the result
     """
@@ -116,7 +135,7 @@ def process(args):
     reportfile = args['--report']
 
     if not result:
-        if reportfile:
+        if reportfile is not None:
             report.write(reportfile,
                          pretty_print=True,
                          encoding="unicode",
@@ -124,32 +143,21 @@ def process(args):
             log.info("Wrote Schematron validation report to %r", reportfile)
         else:
             schlog.debug(report)
+        process_result_svrl(report)
 
-        for idx, fa in enumerate(report.iter(svrl("failed-assert").text), 1):
-            text = fa[0].text.strip()
-            loc = fa.attrib.get('location')
-
-            # The ``role`` attribute contains contains the log level
-            level = role2level(extractrole(fa))
-
-            schlog.log(level, "Message %i\n"
-                      "\tLocation: %r\n"
-                      "\t%s\n"
-                      "%s",
-                      idx, loc, text, "-"*20)
         schlog.fatal("Validation failed!")
         return 200
     else:
-        root = etree.XML("""<svrl:schematron-output
-            xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-            xmlns:schold="http://www.ascc.net/xml/schematron"
-            xmlns:sch="http://www.ascc.net/xml/schematron"
-            xmlns:iso="http://purl.oclc.org/dsdl/schematron"
-            xmlns:d="http://docbook.org/ns/docbook"
-            schemaVersion=""/>""").getroottree()
-        root.write(reportfile, pretty_print=True, encoding="unicode")
+        if reportfile:
+            root = etree.XML("""<svrl:schematron-output
+                xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:schold="http://www.ascc.net/xml/schematron"
+                xmlns:sch="http://www.ascc.net/xml/schematron"
+                xmlns:iso="http://purl.oclc.org/dsdl/schematron"
+                xmlns:d="http://docbook.org/ns/docbook"
+                schemaVersion=""/>""").getroottree()
+            root.write(reportfile, pretty_print=True, encoding="unicode")
 
         schlog.info("Validation was successful")
-
     return 0
