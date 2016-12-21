@@ -92,13 +92,15 @@ def process(args):
                                       phase=args['--phase'],
                                       )
     report = schematron.validation_report
+    reportfile = args['--report']
 
     if not result:
-        if args['--report']:
-            report.write(args['--report'],
+        if reportfile:
+            report.write(reportfile,
                          pretty_print=True,
                          encoding="unicode",
                          )
+            log.info("Wrote Schematron validation report to %r", reportfile)
         else:
             schlog.debug(report)
 
@@ -111,7 +113,9 @@ def process(args):
             # ``svrl:fired-rule`` element.
             # The ``role`` attribute contains contains the log level
             try:
-                role = list(fa.itersiblings(svrl('fired-rule').text, preceding=True))[0].attrib.get('role')
+                role = list(fa.itersiblings(svrl('fired-rule').text,
+                                            preceding=True)
+                            )[0].attrib.get('role')
             except IndexError:
                 role = None
             # Overwrite with next role, if needed
@@ -129,5 +133,16 @@ def process(args):
                      's' if idx > 1 else '')
         return 200
     else:
+        root = etree.XML("""<svrl:schematron-output
+            xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:schold="http://www.ascc.net/xml/schematron"
+            xmlns:sch="http://www.ascc.net/xml/schematron"
+            xmlns:iso="http://purl.oclc.org/dsdl/schematron"
+            xmlns:d="http://docbook.org/ns/docbook"
+            schemaVersion=""/>""").getroottree()
+        root.write(reportfile, pretty_print=True, encoding="unicode")
+
         schlog.info("Validation was successful")
+
     return 0
