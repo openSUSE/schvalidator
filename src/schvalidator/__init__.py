@@ -40,6 +40,18 @@ __all__ = ('__author__',
            )  # flake8: noqa
 
 
+def check_files(args):
+    """Checks XML and Schematron files in dictionary
+
+    :param dict args: Dictionary from docopt
+    """
+    for f, msg in ((args['XMLFILE'], "Need a XML file."),
+                    (args['--schema'], "Need a Schematron schema.")):
+        if f is None:
+            print(clidoc)
+            raise ProjectFilesNotFoundError(msg)
+
+
 def main(cliargs=None):
     """Entry point for the application script
 
@@ -48,11 +60,7 @@ def main(cliargs=None):
     """
     try:
         args = parsecli(cliargs)
-        for f, msg in ((args['XMLFILE'], "Need a XML file."),
-                       (args['--schema'], "Need a Schematron schema.")):
-            if f is None:
-                print(clidoc)
-                raise ProjectFilesNotFoundError(msg)
+        check_files(args)
         return process(args)
 
     except (ProjectFilesNotFoundError) as error:

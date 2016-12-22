@@ -50,6 +50,7 @@ class NSElement(object):
                                     )
         return result
 
+
 svrl = NSElement(NS['svrl'])
 
 
@@ -97,8 +98,7 @@ def extractrole(fa):
         role = None
 
     # Overwrite with next role, if needed
-    role = role if fa.attrib.get('role') is None \
-                else fa.attrib.get('role')
+    role = role if fa.attrib.get('role') is None else fa.attrib.get('role')
     return role
 
 

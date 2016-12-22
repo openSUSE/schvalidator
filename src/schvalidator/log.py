@@ -59,6 +59,7 @@ ROLEDICT = {None: logging.INFO,  # if no role is set, use INFO
             'fatal': logging.FATAL,
             }
 
+
 def setloglevel(verbose):
     """Set log level according to verbose argument
 
