@@ -21,6 +21,7 @@ ratings:
 exclude_paths:
     - tests/**
     - test/**
+    - doc/**
     - dist/**
     - build/**
     - "*.cfg"
