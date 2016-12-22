@@ -41,16 +41,21 @@ def test_NSElement():
     assert element.foo == foo
 
 
+@pytest.mark.parametrize('reportfile', [
+    None, "report.svrl"
+])
 @pytest.mark.parametrize('validation_result,return_value', [
     (True,  0),
     (False, 200),
 ])
-def test_process(monkeypatch, validation_result, return_value, tmpdir):
+def test_process(monkeypatch, tmpdir,
+                 validation_result, return_value, reportfile):
     """Test process() function"""
     args = {'--schema': None,
             'XMLFILE':  None,
             '--phase':  None,
-            '--report': str(tmpdir / "report.svrl"),
+            '--report': str(tmpdir / reportfile) \
+                        if reportfile is not None else None
             }
     def mockreturn(schema, xmlfile, phase=None, xmlparser=None):
         mock = Mock()
