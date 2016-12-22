@@ -17,7 +17,8 @@ License: GPL 3+
     :alt: Code Coverage
 
 The :program:`schvalidator` script validates a given XML file with a
-ISO Schematron schema. Older Schematron versions are not supported.
+`ISO Schematron schema <https://en.wikipedia.org/wiki/Schematron>`_.
+Older Schematron versions are not supported.
 
 
 Quick Start
