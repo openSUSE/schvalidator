@@ -118,9 +118,9 @@ def process_result_svrl(report):
         level = role2level(extractrole(fa))
 
         schlog.log(level,
-                   "Message %i\n"
+                   "No. %i\n"
                    "\tLocation: %r\n"
-                   "\t%s\n"
+                   "\tMessage:%s\n"
                    "%s",
                    idx, loc, text, "-"*20)
 
