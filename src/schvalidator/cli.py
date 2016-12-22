@@ -43,6 +43,10 @@ from .log import log, setloglevel
 
 def parsecli(cliargs=None):
     """Parse CLI arguments with docopt
+
+    :param list cliargs: List of commandline arguments
+    :return: dictionary from docopt
+    :rtype: dict
     """
     from schvalidator import __version__
     version = "%s %s" % (__package__, __version__)

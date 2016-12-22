@@ -57,6 +57,14 @@ svrl = NSElement(NS['svrl'])
 
 def validate_sch(schema, xmlfile, phase=None, xmlparser=None):
     """Validate XML with Schematron schema
+
+    :param str schema: Filename of the Schematron schema
+    :param str xmlfile: Filename of the XML file
+    :param str phase: Phase of the Schematron schema
+    :param xmlparser: :class:`etree.XMLParser` object
+    :return: The result of the validation and the
+             Schematron result tree as class :class:`etree._XSLTResultTree`
+    :rtype: tuple
     """
     if xmlparser is None:
         # Use our default XML parser:
@@ -119,6 +127,10 @@ def process_result_svrl(report):
 
 def process(args):
     """Process the validation and the result
+
+    :param dict args: Dictionary of parsed CLI arguments
+    :return: return exit value
+    :rtype: int
     """
     result, schematron = validate_sch(args['--schema'],
                                       args['XMLFILE'],

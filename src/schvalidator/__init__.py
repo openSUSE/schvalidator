@@ -36,6 +36,7 @@ __all__ = ('__author__',
            '__version__',
            'main',
            'parsecli',
+           'log',
            )  # flake8: noqa
 
 
