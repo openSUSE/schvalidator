@@ -16,11 +16,9 @@
 # To contact SUSE about this file by physical or electronic mail,
 # you may find current contact information at www.suse.com
 
-from .exceptions import ProjectFilesNotFoundError
 from .log import log, role2level, schlog
 from lxml import etree
 from lxml.isoschematron import Schematron
-import os
 
 # Common namespaces
 NS = dict(svrl="http://purl.oclc.org/dsdl/svrl",
@@ -142,7 +140,7 @@ def process(args):
         if reportfile is not None:
             schematron.validation_report.write(reportfile,
                                                pretty_print=True,
-                                               encoding="unicode",
+                                               encoding="utf-8",
                                                )
             log.info("Wrote Schematron validation report to %r", reportfile)
         else:
@@ -161,7 +159,7 @@ def process(args):
                 xmlns:iso="http://purl.oclc.org/dsdl/schematron"
                 xmlns:d="http://docbook.org/ns/docbook"
                 schemaVersion=""/>""").getroottree()
-            root.write(reportfile, pretty_print=True, encoding="unicode")
+            root.write(reportfile, pretty_print=True, encoding="utf-8")
 
         schlog.info("Validation was successful")
     return 0
