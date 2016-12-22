@@ -23,3 +23,7 @@ script:
 after_success:
     - codecov
     - codeclimate-test-reporter
+
+addons:
+    code_climate:
+        repo_token: $CODECLIMATE_REPO_TOKEN
