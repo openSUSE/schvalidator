@@ -53,6 +53,11 @@ modfuncsnames = [ff.__name__ for ff in modfuncs]
 def test_docstrings_nonempty(func):
     fname = func.__name__
     doc = func.__doc__
+
+    # If our function name starts with "_", it's private so we skip this test:
+    if fname.startswith('_'):
+        return True
+
     assert doc is not None, "Need an non-empty docstring for %r" % fname
 
 
@@ -63,6 +68,11 @@ def test_docstrings_nonempty(func):
 def test_docstrings_args(func):
     fname = func.__name__
     doc = func.__doc__
+
+    # If our function name starts with "_", it's private so we skip this test:
+    if fname.startswith('_'):
+        return True
+
     assert doc is not None
     if func.__code__.co_argcount:
         for arg in inspect.getargspec(func).args:
