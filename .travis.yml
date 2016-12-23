@@ -1,14 +1,18 @@
 # Config file for automatic testing at travis-ci.org
 language: python
+cache: pip
 python:
     - "3.4"
     - "3.5"
     - "3.6-dev"
+sudo: false
 
 env:
     global:
         - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
 
+before_install:
+    - env
 
 # command to install dependencies
 install:
@@ -22,8 +26,9 @@ script:
 
 after_success:
     - codecov
-    - codeclimate-test-reporter
+    # - codeclimate-test-reporter
 
 addons:
     code_climate:
         repo_token: $CODECLIMATE_REPO_TOKEN
+

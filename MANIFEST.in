@@ -1,3 +1,5 @@
+# MANIFEST.in for sdist
+#
 
 graft doc
 graft tests
@@ -6,23 +8,23 @@ prune build
 prune dist
 prune .cache
 prune doc/build
-prune .env/
-prune src/schvalidator.egg-info
+prune .env
 
+include .coveragerc
 include ChangeLog
 include LICENSE
 include README*
 include *.txt
 include setup.*
-include .bumpversion.cfg
-include .coveragerc
-include .gitignore
 
-
-exclude src/schvalidator.egg-info/*
+exclude .bumpversion.cfg
+exclude .codeclimate.yml
+exclude .coverage
+exclude .gitignore
+exclude .landscape.yml
 
 recursive-include docs *.rst
+recursive-exclude *.egg-info *
 recursive-include tests *.py *.xml *.sch *.svrl
-recursive-exclude src/*.egg-info/ *
 
 global-exclude *.py[cod] __pycache__ *.so *.dylib *~
