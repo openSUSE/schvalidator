@@ -46,7 +46,7 @@ def check_files(args):
     :param dict args: Dictionary from docopt
     """
     for f, msg in ((args['XMLFILE'], "Need a XML file."),
-                    (args['--schema'], "Need a Schematron schema.")):
+                   (args['--schema'], "Need a Schematron schema.")):
         if f is None:
             print(clidoc)
             raise ProjectFilesNotFoundError(msg)
