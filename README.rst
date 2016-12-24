@@ -1,5 +1,5 @@
-Validates XML Files with ISO Schematron Schemas
-***********************************************
+Validate XML Files with ISO Schematron Schemas
+**********************************************
 
 License: GPL 3+
 
