@@ -27,8 +27,16 @@ script:
 after_success:
     - codecov
     # - codeclimate-test-reporter
+    - if ([[ $TRAVIS_BRANCH == master ]] || [[ $TRAVIS_BRANCH == develop ]]); then
+        make -C docs deploy
+      fi
 
 addons:
     code_climate:
         repo_token: $CODECLIMATE_REPO_TOKEN
+
+notifications:
+    email:
+        on_success: never
+        on_failure: always
 
