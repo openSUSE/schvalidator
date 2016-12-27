@@ -194,9 +194,7 @@ pseudoxml:
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
 
 deploy: html
-	# Sphinx doesn't support whitespace in BUILDDIR either, so...
-	GH_REMOTE     = $(shell git -C $(BUILDDIR) remote)
-	[ -d $(GHPAGES) ] || git clone -b gh-pages $(shell git ls-remote --get-url $(GH_REMOTE)) $(GHPAGES)
+	[ -d $(GHPAGES) ] || git clone -b gh-pages $(shell git ls-remote --get-url origin) $(GHPAGES)
 	git -C $(GHPAGES) pull
 	rsync -avz --exclude=.git $(BUILDDIR)/html/ $(GHPAGES)
 	git -C $(GHPAGES) add --all :/
