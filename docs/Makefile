@@ -20,7 +20,7 @@ ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) sou
 # the i18n builder cannot share the environment and doctrees with the others
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 
-.PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest coverage gettext
+.PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest coverage gettext deploy
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -193,13 +193,11 @@ pseudoxml:
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
 
-.PHONY: deploy
 deploy: html
 	# Sphinx doesn't support whitespace in BUILDDIR either, so...
 	[ -d $(GHPAGES) ] || git clone -b gh-pages $(shell git remote get-url --push $(shell git -C $(BUILDDIR) remote)) $(GHPAGES)
 	git -C $(GHPAGES) pull
 	rsync -avz --exclude=.git $(BUILDDIR)/html/ $(GHPAGES)
 	git -C $(GHPAGES) add --all :/
-	git -C $(GHPAGES) commit --dry-run -a -m "Sync up with $(shell git -C $(BUILDDIR) describe --long --all)"
-	git -C $(GHPAGES) commit -a -m "Sync up with $(shell git -C $(BUILDDIR) describe --long --all)"
-	git -C $(GHPAGES) push
+	git -C $(GHPAGES) commit --dry-run -a -m "Sync up with $(shell git -C $(BUILDDIR) describe --long --all)" 
+	git -C $(GHPAGES) commit -a -m "Sync up with $(shell git -C $(BUILDDIR) describe --long --all)" && git -C $(GHPAGES) push || true
