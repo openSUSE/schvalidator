@@ -5,7 +5,10 @@ pytest
 # flake8
 coverage
 codecov
+codeclimate-test-reporter
 pytest-cov
-sphinx-rtd-theme
+pytest-catchlog
+
+# sphinx-rtd-theme
 # See https://github.com/Syntaf/travis-sphinx/pull/5
-travis-sphinx==1.2.0
+# travis-sphinx==1.2.0

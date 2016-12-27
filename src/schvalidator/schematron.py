@@ -16,29 +16,30 @@
 # To contact SUSE about this file by physical or electronic mail,
 # you may find current contact information at www.suse.com
 
-from .exceptions import ProjectFilesNotFoundError
 from .log import log, role2level, schlog
 from lxml import etree
 from lxml.isoschematron import Schematron
-import os
 
 # Common namespaces
-NS=dict(svrl="http://purl.oclc.org/dsdl/svrl",
-        xs="http://www.w3.org/2001/XMLSchema",
-        sch="http://www.ascc.net/xml/schematron",
-        iso="http://purl.oclc.org/dsdl/schematron",
-        d="http://docbook.org/ns/docbook"
-        )
+NS = dict(svrl="http://purl.oclc.org/dsdl/svrl",
+          xs="http://www.w3.org/2001/XMLSchema",
+          sch="http://www.ascc.net/xml/schematron",
+          iso="http://purl.oclc.org/dsdl/schematron",
+          d="http://docbook.org/ns/docbook"
+          )
 
 
 class NSElement(object):
     def __init__(self, namespace, prefix=None):
         self.ns = namespace
         self.prefix = prefix
+
     def __call__(self, name):
         return etree.QName(self.ns, name)
+
     def __getattr__(self, name):
         return self(name)
+
     def __repr__(self):
         if self.prefix is None:
             result = "%s(%s)" % (self.__class__.__name__, self.ns)
@@ -49,11 +50,20 @@ class NSElement(object):
                                     )
         return result
 
+
 svrl = NSElement(NS['svrl'])
 
 
 def validate_sch(schema, xmlfile, phase=None, xmlparser=None):
     """Validate XML with Schematron schema
+
+    :param str schema: Filename of the Schematron schema
+    :param str xmlfile: Filename of the XML file
+    :param str phase: Phase of the Schematron schema
+    :param xmlparser: :class:`etree.XMLParser` object
+    :return: The result of the validation and the
+             Schematron result tree as class :class:`etree._XSLTResultTree`
+    :rtype: tuple
     """
     if xmlparser is None:
         # Use our default XML parser:
@@ -61,8 +71,8 @@ def validate_sch(schema, xmlfile, phase=None, xmlparser=None):
                                     no_network=True,
                                     )
     doctree = etree.parse(xmlfile, parser=xmlparser)
-    log.info("Schematron validation with file=%r, schema=%r, phase=%r",
-             xmlfile, schema, phase)
+    log.debug("Schematron validation with file=%r, schema=%r, phase=%r",
+              xmlfile, schema, phase)
     schematron = Schematron(file=schema,
                             phase=phase,
                             store_report=True,
@@ -72,62 +82,84 @@ def validate_sch(schema, xmlfile, phase=None, xmlparser=None):
     return result, schematron
 
 
-def check_args(args):
-    """Checks the arguments for consistency"""
-    log.info("Consistency check for args: %s", args)
-    if not os.path.exists(args['XMLFILE']):
-        raise ProjectFilesNotFoundError("XML file not found",
-                                        args['XMLFILE'])
-    if not os.path.exists(args['--schema']):
-        raise ProjectFilesNotFoundError("Schematron file "
-                                        "does not exist!",
-                                        args['--schema'], )
+def extractrole(fa):
+    """Try to extract ``role`` attributes either in the ``svrl:failed-assert''
+       or in the preceding sibling ``svrl:fired-rule`` element.
+
+    :param fa: the current `svrl:failed-assert`` element
+    :return: attribute value of ``role``, otherwise None if not found
+    :rtype: str
+    """
+    try:
+        role = list(fa.itersiblings(svrl('fired-rule').text,
+                                    preceding=True)
+                    )[0].attrib.get('role')
+    except IndexError:
+        role = None
+
+    # Overwrite with next role, if needed
+    role = role if fa.attrib.get('role') is None else fa.attrib.get('role')
+    return role
+
+
+def process_result_svrl(report):
+    """Process the report tree
+
+    :param report: tree of :class:`lxml.etree._XSLTResultTree`
+    """
+
+    for idx, fa in enumerate(report.iter(svrl("failed-assert").text), 1):
+        text = fa[0].text.strip()
+        loc = fa.attrib.get('location')
+
+        # The ``role`` attribute contains contains the log level
+        level = role2level(extractrole(fa))
+
+        schlog.log(level,
+                   "No. %i\n"
+                   "\tLocation: %r\n"
+                   "\tMessage:%s\n"
+                   "%s",
+                   idx, loc, text, "-"*20)
+
 
 def process(args):
     """Process the validation and the result
+
+    :param dict args: Dictionary of parsed CLI arguments
+    :return: return exit value
+    :rtype: int
     """
-    check_args(args)
     result, schematron = validate_sch(args['--schema'],
                                       args['XMLFILE'],
                                       phase=args['--phase'],
                                       )
-    report = schematron.validation_report
+    reportfile = args['--report']
 
     if not result:
-        if args['--report']:
-            report.write(args['--report'],
-                         pretty_print=True,
-                         encoding="unicode",
-                         )
+        if reportfile is not None:
+            schematron.validation_report.write(reportfile,
+                                               pretty_print=True,
+                                               encoding="utf-8",
+                                               )
+            log.info("Wrote Schematron validation report to %r", reportfile)
         else:
-            schlog.debug(report)
+            log.debug(schematron.validation_report)
+        process_result_svrl(schematron.validation_report)
 
-        for idx, fa in enumerate(report.iter(svrl("failed-assert").text), 1):
-            text = fa[0].text.strip()
-            loc = fa.attrib.get('location')
-
-            # Try to extract ``role`` attributes either in the
-            # ``svrl:failed-assert'' or in the preceding sibling
-            # ``svrl:fired-rule`` element.
-            # The ``role`` attribute contains contains the log level
-            try:
-                role = list(fa.itersiblings(svrl('fired-rule').text, preceding=True))[0].attrib.get('role')
-            except:
-                role = None
-            # Overwrite with next role, if needed
-            role = role if fa.attrib.get('role') is None \
-                        else fa.attrib.get('role')
-            level = role2level(role)
-
-            schlog.log(level, "Message %i\n"
-                      "\tLocation: %r\n"
-                      "\t%s\n"
-                      "%s",
-                      idx, loc, text, "-"*20)
-        schlog.fatal("Failed validation with %i error%s",
-                     idx,
-                     's' if idx > 1 else '')
+        schlog.fatal("Validation failed!")
         return 200
     else:
+        if reportfile:
+            root = etree.XML("""<svrl:schematron-output
+                xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:schold="http://www.ascc.net/xml/schematron"
+                xmlns:sch="http://www.ascc.net/xml/schematron"
+                xmlns:iso="http://purl.oclc.org/dsdl/schematron"
+                xmlns:d="http://docbook.org/ns/docbook"
+                schemaVersion=""/>""").getroottree()
+            root.write(reportfile, pretty_print=True, encoding="utf-8")
+
         schlog.info("Validation was successful")
     return 0

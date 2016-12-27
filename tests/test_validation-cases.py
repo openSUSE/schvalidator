@@ -17,13 +17,26 @@
 # you may find current contact information at www.suse.com
 
 import os.path
+import logging
+from lxml import etree
 import pytest
 import sys
 
-import schvalidator
+from schvalidator.log import setloglevel
+from schvalidator.schematron import NS, validate_sch
 
 
-def test_xml(schtestcase):
+def test_validation(schtestcase):
     """Run one test case"""
     xmlfile, schema, svrl = schtestcase
-    print(">>>", xmlfile, schema, svrl)
+    setloglevel(logging.NOTSET)
+
+    result, schematron = validate_sch(str(schema), str(xmlfile))
+    report = schematron.validation_report
+    svrltree = etree.parse(str(svrl))
+
+    xpathexpr = ["count(//svrl:failed-assert)"]
+    for expr in xpathexpr:
+        expected = svrltree.xpath(expr, namespaces=NS)
+        result = report.xpath(expr, namespaces=NS)
+        assert expected == result

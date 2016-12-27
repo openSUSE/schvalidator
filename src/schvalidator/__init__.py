@@ -36,7 +36,20 @@ __all__ = ('__author__',
            '__version__',
            'main',
            'parsecli',
+           'log',
            )  # flake8: noqa
+
+
+def check_files(args):
+    """Checks XML and Schematron files in dictionary
+
+    :param dict args: Dictionary from docopt
+    """
+    for f, msg in ((args['XMLFILE'], "Need a XML file."),
+                   (args['--schema'], "Need a Schematron schema.")):
+        if f is None:
+            print(clidoc)
+            raise ProjectFilesNotFoundError(msg)
 
 
 def main(cliargs=None):
@@ -47,22 +60,19 @@ def main(cliargs=None):
     """
     try:
         args = parsecli(cliargs)
-        if args['XMLFILE'] is None:
-            print(clidoc)
-            raise ProjectFilesNotFoundError("Need a XML file.")
-        if args['--schema'] is None:
-            print(clidoc)
-            raise ProjectFilesNotFoundError("Need a Schematron schema.")
+        check_files(args)
         return process(args)
 
     except (ProjectFilesNotFoundError) as error:
         log.fatal(error)
         sys.exit(10)
 
-    except (etree.XMLSyntaxError, etree.XSLTApplyError) as error:
-        log.fatal(error, exc_info=error, stack_info=True)
+    except (etree.XMLSyntaxError,
+            etree.XSLTApplyError,
+            etree.SchematronParseError) as error:
+        log.fatal(error)  # exc_info=error,
         sys.exit(20)
 
     except (FileNotFoundError, OSError) as error:
-        log.fatal(error, exc_info=error, stack_info=True)
+        log.fatal(error)
         sys.exit(30)

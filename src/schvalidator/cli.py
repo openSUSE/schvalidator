@@ -21,11 +21,11 @@ Validates XML files with Schematron schemas
 
 Usage:
     schvalidator [-h | --help]
-    schvalidator [-vvv | -vv | -v] [options] --schema SCHEMA XMLFILE
+    schvalidator [-v ...] [options] --schema SCHEMA XMLFILE
 
 Options:
     -h, --help      Shows this help
-    -v, -vv, -vv    Raise verbosity level
+    -v              Raise verbosity level
     --version       Prints the version
     --report REPORTFILE
                     save output of Schematron validation to REPORTFILE
@@ -36,43 +36,22 @@ Options:
 """
 
 
-# import argparse
-from argparse import Namespace
 from docopt import docopt
 
 from .log import log, setloglevel
 
 
-def prepareparams(params):
-    """Convert the list with "NAME=VALUE" entries into
-       a tuple with ('NAME', 'VALUE')
-
-       :param params: a list with "NAME=VALUE" entries
-       :return: a tuple with ('NAME', 'VALUE') entries
-    """
-    result = []
-    if params is None:
-        return result
-    for item in params:
-        try:
-            name, value = item.split('=')
-        except ValueError:
-            log.warning("Parameter %r doesn't adhere to the "
-                        "NAME=VALUE syntax. Skipping.",
-                        item)
-            continue
-        result.append((name.strip(), value.strip()))
-    return result
-
-
 def parsecli(cliargs=None):
     """Parse CLI arguments with docopt
+
+    :param list cliargs: List of commandline arguments
+    :return: dictionary from docopt
+    :rtype: dict
     """
     from schvalidator import __version__
     version = "%s %s" % (__package__, __version__)
     args = docopt(__doc__, argv=cliargs, version=version)
     # verbose = args['-v'] if args['-v'] else None
-    verbose = args['-v']
-    setloglevel(verbose)
+    setloglevel(args['-v'])
     log.debug("Got the following options and arguments: %s", args)
     return args
