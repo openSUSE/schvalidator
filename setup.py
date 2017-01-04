@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 #
 # Copyright (c) 2016 SUSE Linux GmbH
 #
@@ -52,6 +52,9 @@ setupdict = dict(
    packages=find_packages('src'),
    package_dir={'': 'src'},
    install_requires=['lxml', 'docopt'],
+
+   setup_requires=['pytest-runner', ],
+   tests_require=['pytest', 'pytest-cov', 'pytest-catchlog'],
 
    # If there are data files included in your packages that need to be
    # installed, specify them here.  If using Python 2.6 or less, then these
