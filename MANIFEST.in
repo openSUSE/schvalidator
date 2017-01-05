@@ -24,7 +24,11 @@ exclude .gitignore
 exclude .landscape.yml
 
 recursive-include docs *.rst
-recursive-exclude *.egg-info *
 recursive-include tests *.py *.xml *.sch *.svrl
 
+recursive-exclude *.egg-info *
+recursive-exclude .cache *
+recursive-exclude .env *
+recursive-exclude build *
+recursive-exclude dist *
 global-exclude *.py[cod] __pycache__ *.so *.dylib *~
