@@ -31,7 +31,7 @@ from lxml import etree
 import sys
 
 
-__version__ = "0.1.0"  # flake8: noqa
+__version__ = "0.1.1"  # flake8: noqa
 __author__ = "Thomas Schraitle <toms (AT) suse DOT de>"  # flake8: noqa
 __all__ = ('__author__',
            '__version__',
