@@ -1,17 +1,14 @@
-<svrl:schematron-output schemaVersion="" title="schematron-003.sch"
-  xmlns:d="http://docbook.org/ns/docbook"
-  xmlns:iso="http://purl.oclc.org/dsdl/schematron"
-  xmlns:sch="http://www.ascc.net/xml/schematron"
-  xmlns:schold="http://www.ascc.net/xml/schematron"
-  xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <svrl:ns-prefix-in-attribute-values prefix="d"
-    uri="http://docbook.org/ns/docbook"/>
+<svrl:schematron-output xmlns:svrl="http://purl.oclc.org/dsdl/svrl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:schold="http://www.ascc.net/xml/schematron" xmlns:sch="http://www.ascc.net/xml/schematron" xmlns:iso="http://purl.oclc.org/dsdl/schematron" xmlns:d="http://docbook.org/ns/docbook" title="schematron-003.sch" schemaVersion="">
+  <!--   
+		   
+		   
+		 -->
+  <svrl:ns-prefix-in-attribute-values uri="http://docbook.org/ns/docbook" prefix="d"/>
   <svrl:active-pattern name="Rule"/>
-  <svrl:fired-rule context="/d:article"/>
-  <svrl:failed-assert
-    location="/*[local-name()='article' and namespace-uri()='http://docbook.org/ns/docbook']"
-    role="info" test="d:abstract">
-    <svrl:text> Would be nice to have an abstract. </svrl:text>
+  <svrl:fired-rule context="/d:article" role="error"/>
+  <svrl:failed-assert test="d:abstract" role="info" location="/*[local-name()='article' and namespace-uri()='http://docbook.org/ns/docbook']">
+    <svrl:text>
+        Would be nice to have an abstract.
+      </svrl:text>
   </svrl:failed-assert>
 </svrl:schematron-output>

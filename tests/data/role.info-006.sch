@@ -10,7 +10,7 @@
 
   <sch:pattern>
     <sch:title>Rule</sch:title>
-    <sch:rule context="/d:article">
+    <sch:rule context="/d:article" role="error">
       <sch:assert test="d:abstract" role="info">
         Would be nice to have an abstract.
       </sch:assert>
