@@ -23,6 +23,8 @@ import sys
 from unittest.mock import patch
 
 import schvalidator
+from schvalidator.common import ERROR_CODES
+from schvalidator.exceptions import ProjectFilesNotFoundError
 
 
 def test_main(capsys):
@@ -40,9 +42,8 @@ def test_main_with_exception(monkeypatch, schema, xmlfile):
     # Patching etree.parse
     monkeypatch.setattr('schvalidator.cli.parsecli',
                         {'--schema': schema, 'XMLFILE': xmlfile})
-
-    with pytest.raises(SystemExit):
-        schvalidator.main(["", "--schema", "schema.sch"])
+    result = schvalidator.main(["", "--schema", "schema.sch"])
+    assert result == ERROR_CODES[FileNotFoundError]
 
 
 def test_version(capsys):

@@ -16,9 +16,10 @@
 # To contact SUSE about this file by physical or electronic mail,
 # you may find current contact information at www.suse.com
 
-from lxml import etree
+from lxml.etree import XSLTParseError
 import pytest
 import schvalidator
+from schvalidator.common import ERROR_CODES
 
 
 SCHEMATRON="""<sch:schema id="schematron-003.sch" queryBinding="xslt"
@@ -48,6 +49,6 @@ def test_use_wrong_schematron(tmpdir):
     schemafile.write(SCHEMATRON)
     xmlfile.write(XML)
 
-    with pytest.raises((etree.XSLTParseError, SystemExit)):
-        schvalidator.main(['--schema', str(schemafile),
+    result = schvalidator.main(['--schema', str(schemafile),
                            str(xmlfile)])
+    assert result == ERROR_CODES.get(repr(XSLTParseError))
