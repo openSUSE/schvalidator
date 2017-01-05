@@ -73,6 +73,10 @@ def main(cliargs=None):
         log.fatal(error)  # exc_info=error,
         sys.exit(20)
 
+    except etree.XSLTParseError as error:
+        log.fatal(error.error_log)
+        sys.exit(20)
+
     except (FileNotFoundError, OSError) as error:
         log.fatal(error)
         sys.exit(30)
