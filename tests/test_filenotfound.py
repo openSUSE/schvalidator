@@ -1,5 +1,6 @@
 
 import pytest
+from schvalidator.common import ERROR_CODES
 import schvalidator.schematron as schematron
 from schvalidator.exceptions import ProjectFilesNotFoundError
 
@@ -18,6 +19,6 @@ def test_filenotfound2():
     #
     from schvalidator import main
 
-    with pytest.raises(SystemExit):
-        main(['--schema', 'schema-does-not-exist.sch',
+    result = main(['--schema', 'schema-does-not-exist.sch',
               'file-does-not-exist.xml'])
+    assert result == ERROR_CODES[FileNotFoundError]

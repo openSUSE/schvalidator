@@ -1,12 +1,18 @@
-<svrl:schematron-output schemaVersion="" title="schematron-001.sch"
+<svrl:schematron-output schemaVersion="" title="schematron-003.sch"
   xmlns:d="http://docbook.org/ns/docbook"
   xmlns:iso="http://purl.oclc.org/dsdl/schematron"
   xmlns:sch="http://www.ascc.net/xml/schematron"
   xmlns:schold="http://www.ascc.net/xml/schematron"
   xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
   <svrl:ns-prefix-in-attribute-values prefix="d"
     uri="http://docbook.org/ns/docbook"/>
   <svrl:active-pattern name="Rules"/>
-  <svrl:fired-rule context="/*"/>
+  <svrl:fired-rule context="/d:article"/>
+  <svrl:failed-assert
+    location="/*[local-name()='article' and namespace-uri()='http://docbook.org/ns/docbook']"
+    test="count(d:section/d:section) != 1">
+    <svrl:text> Lonely section </svrl:text>
+  </svrl:failed-assert>
 </svrl:schematron-output>

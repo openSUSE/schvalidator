@@ -22,6 +22,7 @@ Validates an XML file with a Schematron schema
 
 from .cli import parsecli
 from .cli import __doc__ as clidoc
+from .common import ERROR_CODES
 from docopt import printable_usage
 from .exceptions import ProjectFilesNotFoundError
 from .log import log
@@ -56,8 +57,9 @@ def main(cliargs=None):
     """Entry point for the application script
 
     :param list cliargs: Arguments to parse or None (=use sys.argv)
-    :return: True or False
+    :return: return codes from ``ERROR_CODES``
     """
+
     try:
         args = parsecli(cliargs)
         check_files(args)
@@ -65,14 +67,18 @@ def main(cliargs=None):
 
     except (ProjectFilesNotFoundError) as error:
         log.fatal(error)
-        sys.exit(10)
+        return ERROR_CODES.get(repr(type(error)), 255)
 
     except (etree.XMLSyntaxError,
             etree.XSLTApplyError,
             etree.SchematronParseError) as error:
-        log.fatal(error)  # exc_info=error,
-        sys.exit(20)
+        log.fatal(error)
+        return ERROR_CODES.get(repr(type(error)), 255)
+
+    except etree.XSLTParseError as error:
+        log.fatal(error.error_log)
+        return ERROR_CODES.get(type(error), 255)
 
     except (FileNotFoundError, OSError) as error:
         log.fatal(error)
-        sys.exit(30)
+        return ERROR_CODES.get(repr(type(error)), 255)

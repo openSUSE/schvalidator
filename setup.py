@@ -62,9 +62,6 @@ setupdict = dict(
    package_data={
         # '': ['src/dbschvalid/*.xsl'],
    },
-   extras_require={
-        'test': ['pytest', 'coverage'],
-   },
    entry_points={
         'console_scripts': [
             'schvalidator=schvalidator:main',

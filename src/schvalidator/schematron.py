@@ -136,30 +136,20 @@ def process(args):
                                       )
     reportfile = args['--report']
 
-    if not result:
-        if reportfile is not None:
-            schematron.validation_report.write(reportfile,
+    if reportfile is not None:
+        schematron.validation_report.write(reportfile,
                                                pretty_print=True,
                                                encoding="utf-8",
                                                )
-            log.info("Wrote Schematron validation report to %r", reportfile)
-        else:
-            log.debug(schematron.validation_report)
-        process_result_svrl(schematron.validation_report)
+        log.info("Wrote Schematron validation report to %r", reportfile)
+    else:
+        log.debug(schematron.validation_report)
 
+    process_result_svrl(schematron.validation_report)
+
+    if not result:
         schlog.fatal("Validation failed!")
         return 200
     else:
-        if reportfile:
-            root = etree.XML("""<svrl:schematron-output
-                xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:schold="http://www.ascc.net/xml/schematron"
-                xmlns:sch="http://www.ascc.net/xml/schematron"
-                xmlns:iso="http://purl.oclc.org/dsdl/schematron"
-                xmlns:d="http://docbook.org/ns/docbook"
-                schemaVersion=""/>""").getroottree()
-            root.write(reportfile, pretty_print=True, encoding="utf-8")
-
         schlog.info("Validation was successful")
     return 0
