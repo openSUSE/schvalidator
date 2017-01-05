@@ -16,9 +16,18 @@ License: GPL 3+
     :target: https://codecov.io/github/openSUSE/schvalidator?branch=develop
     :alt: Code Coverage
 
+‟A feather duster to reach the parts other schema languages cannot reach.” -- Rick Jelliffe
+
 The :program:`schvalidator` script validates a given XML file with a
 `ISO Schematron schema <https://en.wikipedia.org/wiki/Schematron>`_.
 Older Schematron versions are not supported.
+
+
+Conceptual Overview
+===================
+
+XML file and Schematron schema is passed to ``lxml.isoschematron.Schematron``,
+the result is collected and presented nicely.
 
 
 Quick Start

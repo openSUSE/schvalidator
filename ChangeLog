@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jan 05 17:40:00 UTC 2017 - toms@opensuse.org
+
+- No changes in user API
+- Add more test cases
+- Implement "setup.py test" with pytest-runner
+
+-------------------------------------------------------------------
 Tue Dec 27 13:00:00 UTC 2016 - toms@opensuse.org
 
 First stable release of schvalidator

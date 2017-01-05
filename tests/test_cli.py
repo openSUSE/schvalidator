@@ -23,6 +23,7 @@ from unittest.mock import patch
 
 import schvalidator
 from schvalidator.cli import parsecli
+from schvalidator.common import ERROR_CODES
 from schvalidator.exceptions import ProjectFilesNotFoundError
 
 
@@ -73,8 +74,9 @@ def test_main_mock_parsecli(monkeypatch):
     monkeypatch.setattr(schvalidator,
                         'parsecli',
                         mock_parsecli)
-    with pytest.raises((ProjectFilesNotFoundError, SystemExit)):
-        schvalidator.main()
+
+    result = schvalidator.main()
+    assert result == ERROR_CODES[ProjectFilesNotFoundError]
 
 
 def test_main_mock_parsecli_process(monkeypatch):
@@ -85,7 +87,8 @@ def test_main_mock_parsecli_process(monkeypatch):
                 'XMLFILE':  "a.xml",
                 }
     def mock_process(args):
-        return 100
+        # Use a return code that is never be used in schvalidator:
+        return -1
 
     monkeypatch.setattr(schvalidator,
                         'parsecli',
@@ -93,7 +96,7 @@ def test_main_mock_parsecli_process(monkeypatch):
     monkeypatch.setattr(schvalidator,
                         'process',
                         mock_process)
-    assert schvalidator.main() == 100
+    assert schvalidator.main() == -1
 
 
 @pytest.mark.parametrize("excpt,data", [
@@ -117,8 +120,8 @@ def test_main_raise_etree(monkeypatch, excpt, data):
                         'process',
                         mock_process)
 
-    with pytest.raises((excpt, SystemExit)):
-        schvalidator.main()
+    result = schvalidator.main()
+    assert result == ERROR_CODES[excpt]
 
 
 @pytest.mark.parametrize("excpt", [
@@ -140,5 +143,5 @@ def test_main_raise_OSError(monkeypatch, excpt):
                         'process',
                         mock_process)
 
-    with pytest.raises((excpt, SystemExit)):
-        schvalidator.main()
+    result = schvalidator.main()
+    assert result == ERROR_CODES[excpt]

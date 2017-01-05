@@ -4,8 +4,7 @@ cache: pip
 python:
     - "3.4"
     - "3.5"
-    - "3.6-dev"
-sudo: false
+    - "3.6"
 
 env:
     global:
@@ -27,8 +26,14 @@ script:
 after_success:
     - codecov
     # - codeclimate-test-reporter
+    - ./.deploy-docs.sh
 
 addons:
     code_climate:
         repo_token: $CODECLIMATE_REPO_TOKEN
+
+notifications:
+    email:
+        on_success: never
+        on_failure: always
 

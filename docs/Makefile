@@ -6,6 +6,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = build
+GHPAGES       = $(BUILDDIR)/../gh-pages
 
 # User-friendly check for sphinx-build
 ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
@@ -19,11 +20,12 @@ ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) sou
 # the i18n builder cannot share the environment and doctrees with the others
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 
-.PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest coverage gettext
+.PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest coverage gettext deploy
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
 	@echo "  html       to make standalone HTML files"
+	@echo "  deploy     to deploy the built HTML to gh-pages"
 	@echo "  dirhtml    to make HTML files named index.html in directories"
 	@echo "  singlehtml to make a single large HTML file"
 	@echo "  pickle     to make pickle files"
@@ -190,3 +192,11 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
+
+deploy: html
+	[ -d $(GHPAGES) ] || git clone -b gh-pages $(shell git ls-remote --get-url origin) $(GHPAGES)
+	git -C $(GHPAGES) pull
+	rsync -avz --exclude=.git $(BUILDDIR)/html/ $(GHPAGES)
+	git -C $(GHPAGES) add --all :/
+	git -C $(GHPAGES) commit --dry-run -a -m "Sync up with $(shell git -C $(BUILDDIR) describe --long --all)" 
+	git -C $(GHPAGES) commit -a -m "Sync up with $(shell git -C $(BUILDDIR) describe --long --all)" && git -C $(GHPAGES) push || true

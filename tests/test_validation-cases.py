@@ -35,7 +35,11 @@ def test_validation(schtestcase):
     report = schematron.validation_report
     svrltree = etree.parse(str(svrl))
 
-    xpathexpr = ["count(//svrl:failed-assert)"]
+    xpathexpr = ["count(//svrl:failed-assert)",
+                 "/*/svrl:fired-rule/@context",
+                 "/*/svrl:fired-rule/@role",
+                 "//svrl:failed-assert/@role",
+                 ]
     for expr in xpathexpr:
         expected = svrltree.xpath(expr, namespaces=NS)
         result = report.xpath(expr, namespaces=NS)

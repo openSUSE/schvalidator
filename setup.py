@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 #
 # Copyright (c) 2016 SUSE Linux GmbH
 #
@@ -23,7 +23,7 @@ from setuptools import setup, find_packages
 
 setupdict = dict(
    name='schvalidator',
-   version='0.1.0',
+   version='0.1.1',
    description='Schematron Validator',
    url='https://github.com/openSUSE/schvalidator',
    # Author details
@@ -53,14 +53,14 @@ setupdict = dict(
    package_dir={'': 'src'},
    install_requires=['lxml', 'docopt'],
 
+   setup_requires=['pytest-runner', ],
+   tests_require=['pytest', 'pytest-cov', 'pytest-catchlog'],
+
    # If there are data files included in your packages that need to be
    # installed, specify them here.  If using Python 2.6 or less, then these
    # have to be included in MANIFEST.in as well.
    package_data={
         # '': ['src/dbschvalid/*.xsl'],
-   },
-   extras_require={
-        'test': ['pytest', 'coverage'],
    },
    entry_points={
         'console_scripts': [

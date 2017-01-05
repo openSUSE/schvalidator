@@ -101,10 +101,10 @@ Your DocBook 5 source is saved in file :file:`article.xml`:
 .. sourcecode:: xml
 
     <article xml:id="article"
-            xmlns="http://docbook.org/ns/docbook"
-            xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Article 002 Validated with Schematron</title>
-    <para>bla</para>
+             xmlns="http://docbook.org/ns/docbook"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+       <title>Article Validated with Schematron</title>
+       <para>bla</para>
     </article>
 
 Run the script :program:`schvalidator` like this::
@@ -126,19 +126,19 @@ report contains the following elements:
 .. sourcecode:: xml
 
     <svrl:schematron-output schemaVersion="" title="root.sch"
-    xmlns:iso="http://purl.oclc.org/dsdl/schematron"
-    xmlns:sch="http://www.ascc.net/xml/schematron"
-    xmlns:schold="http://www.ascc.net/xml/schematron"
-    xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <svrl:active-pattern name="Rules"/>
-    <svrl:fired-rule context="/*"/>
-    <svrl:failed-assert
-        location="/*[local-name()='article' and namespace-uri()='http://docbook.org/ns/docbook']"
-        test="@version and @xml:id">
-        <svrl:text> Root element needs @version and @xml:id attributes!
-        </svrl:text>
-    </svrl:failed-assert>
+        xmlns:iso="http://purl.oclc.org/dsdl/schematron"
+        xmlns:sch="http://www.ascc.net/xml/schematron"
+        xmlns:schold="http://www.ascc.net/xml/schematron"
+        xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <svrl:active-pattern name="Rules"/>
+        <svrl:fired-rule context="/*"/>
+        <svrl:failed-assert
+            location="/*[local-name()='article' and namespace-uri()='http://docbook.org/ns/docbook']"
+            test="@version and @xml:id">
+            <svrl:text> Root element needs @version and @xml:id attributes!
+            </svrl:text>
+        </svrl:failed-assert>
     </svrl:schematron-output>
 
 
@@ -167,7 +167,7 @@ See also
 :manpage:`jing(1)`, :manpage:`xmllint(1)`
 
 
-.. Author
-   ------
+Author
+------
 
    Thomas Schraitle <toms(AT)opensuse.org>
