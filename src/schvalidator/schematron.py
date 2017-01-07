@@ -88,7 +88,7 @@ def extractrole(fa):
 
     :param fa: the current `svrl:failed-assert`` element
     :return: attribute value of ``role``, otherwise None if not found
-    :rtype: str
+    :rtype: str | None
     """
     try:
         role = list(fa.itersiblings(svrl('fired-rule').text,
