@@ -5,6 +5,7 @@
 schvalidator -- Manual Page
 ===========================
 
+Version |version|
 
 Synopsis
 --------

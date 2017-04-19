@@ -38,6 +38,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
+    'sphinxjp.themes.basicstrap',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -56,7 +57,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'schvalidator'
-copyright = '2016, SUSE Linux GmbH'
+copyright = '2016-2017, SUSE Linux GmbH'
 author = 'Thomas Schraitle'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -83,7 +84,7 @@ language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = []
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -119,13 +120,15 @@ github_repo = project
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-import sphinx_bootstrap_theme
+# import sphinx_bootstrap_theme
 # extensions.append('sphinx_bootstrap_theme')
-html_theme = 'bootstrap'
+# html_theme = 'bootstrap'
+html_theme = 'basicstrap'
+
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
+# html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 html_theme_options = {
-    'bootswatch_theme': "yeti",
+    # 'bootswatch_theme': "yeti",
     }
 
 print(bold("Using %r theme" % html_theme))
