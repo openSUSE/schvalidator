@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+
+
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    
+    <title>schvalidator – Manual Page &mdash; schvalidator 0.1.1 documentation</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    
+
+<link rel="stylesheet" href="_static/css/basicstrap-base.css" type="text/css" />
+<link rel="stylesheet" id="current-theme" href="_static/css/bootstrap3/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" id="current-adjust-theme" type="text/css" />
+
+<link rel="stylesheet" href="_static/css/font-awesome.min.css">
+
+<style type="text/css">
+  body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+  }
+</style>
+
+<link rel="stylesheet" href="_static/css/basicstrap.css" type="text/css" />
+<link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+<script type="text/javascript">
+  var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:    './',
+            VERSION:     '0.1.1',
+            COLLAPSE_INDEX: false,
+            FILE_SUFFIX: '.html',
+            HAS_SOURCE:  true
+  };
+</script>
+    <script type="text/javascript" src="_static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/bootstrap3.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="_static/js/basicstrap.js"></script>
+<script type="text/javascript">
+</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="schvalidator 0.1.1 documentation" href="index.html" />
+    <link rel="prev" title="Welcome to schvalidator’s Documentation!" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div id="navbar-top" class="navbar navbar-fixed-top navbar-default" role="navigation" aria-label="top navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">schvalidator 0.1.1 documentation</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown visible-xs">
+                <a role="button" id="localToc" data-toggle="dropdown" data-target="#" href="#">Table Of Contents <b class="caret"></b></a>
+                <ul class="dropdown-menu localtoc sp-localtoc" role="menu" aria-labelledby="localToc">
+                <ul>
+<li><a class="reference internal" href="#">schvalidator &#8211; Manual Page</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#conceptual-overview">Conceptual Overview</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#diagnostics">Diagnostics</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+<li><a class="reference internal" href="#author">Author</a></li>
+</ul>
+</li>
+</ul>
+
+                </ul>
+              </li>
+
+            
+              <li><a href="index.html" title="Welcome to schvalidator’s Documentation!" accesskey="P">previous </a></li>
+              <li><a href="genindex.html" title="General Index" accesskey="I">index </a></li>
+            
+            <li class="visible-xs"><a href="_sources/schvalidator.rst.txt" rel="nofollow">Show Source</a></li>
+
+            <li class="visible-xs">
+                <form class="search form-search form-inline navbar-form navbar-right sp-searchbox" action="search.html" method="get">
+                  <div class="input-append input-group">
+                    <input type="text" class="search-query form-control" name="q" placeholder="Search...">
+                    <span class="input-group-btn">
+                    <input type="submit" class="btn" value="Go" />
+                    </span>
+                  </div>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </li>
+
+            
+
+          </ul>
+
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- container -->
+    <div class="container-fluid">
+
+      <!-- row -->
+      <div class="row">
+         
+<div class="col-md-3 hidden-xs" id="sidebar-wrapper">
+  <div class="sidebar hidden-xs" role="navigation" aria-label="main navigation">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">schvalidator &#8211; Manual Page</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#conceptual-overview">Conceptual Overview</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#diagnostics">Diagnostics</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+<li><a class="reference internal" href="#author">Author</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to schvalidator&#8217;s Documentation!</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/schvalidator.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" role="search">
+  <h3>Quick search</h3>
+  <form class="search form-inline" action="search.html" method="get">
+      <div class="input-append input-group">
+        <input type="text" class="search-query form-control" name="q" placeholder="Search...">
+        <span class="input-group-btn">
+        <input type="submit" class="btn" value="Go" />
+        </span>
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+  </div>
+</div> 
+        
+
+        <div class="col-md-9" id="content-wrapper">
+          <div class="document" role="main">
+            <div class="documentwrapper">
+              <div class="bodywrapper">
+                <div class="body">
+                  
+  <div class="section" id="schvalidator-manual-page">
+<h1>schvalidator &#8211; Manual Page<a class="headerlink" href="#schvalidator-manual-page" title="Permalink to this headline">¶</a></h1>
+<p>Version 0.1.1</p>
+<div class="section" id="synopsis">
+<h2>Synopsis<a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">schvalidator</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="o">--</span><span class="n">schema</span> <span class="n">SCHEMA</span> <span class="n">XMLFILE</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p><strong class="program">schvalidator</strong> expects a <a class="reference external" href="https://en.wikipedia.org/wiki/Schematron">ISO Schematron schema</a>
+and a XML file to validate. If there are validation errors, the script
+reports each error in a separate line.</p>
+</div>
+<div class="section" id="conceptual-overview">
+<h2>Conceptual Overview<a class="headerlink" href="#conceptual-overview" title="Permalink to this headline">¶</a></h2>
+<p>Basically, before a Schematron schema can perform its validation task,
+it is internally transformed into a XSLT stylesheet by the lxml library.
+This <em>in-memory stylesheet</em> is then applied to the XML file.</p>
+<p>This stylesheet creates a <em>validation report</em> as an XML file.
+The root element <code class="docutils literal"><span class="pre">svrl:schematron-output</span></code> belongs to the namespace
+<code class="docutils literal"><span class="pre">http://purl.oclc.org/dsdl/svrl</span></code> (see below). The validation report
+contains all failed assertions and their error messages. The &#8220;severity&#8221; of
+the assertion is stored in the <code class="docutils literal"><span class="pre">role</span></code> attribute (if available). To
+get this validation report, use the option <code class="xref std std-option docutils literal"><span class="pre">--report</span></code> to save
+it to a file.</p>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<dl class="option">
+<dt id="cmdoption-schvalidator-h">
+<code class="descname">-h</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--help</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-schvalidator-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display usage summary</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-schvalidator-version">
+<code class="descname">--version</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-schvalidator-version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the version</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-schvalidator-v">
+<code class="descname">-v...</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-schvalidator-v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise verbosity level; can be used more than once</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-schvalidator-report">
+<code class="descname">--report</code><code class="descclassname"> &lt;REPORTFILE&gt;</code><a class="headerlink" href="#cmdoption-schvalidator-report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save output of Schematron validation to REPORTFILE</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-schvalidator-phase">
+<code class="descname">--phase</code><code class="descclassname"> &lt;PHASE&gt;</code><a class="headerlink" href="#cmdoption-schvalidator-phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a validation phase</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-schvalidator-schema">
+<code class="descname">--schema</code><code class="descclassname"> &lt;SCHEMA&gt;</code><a class="headerlink" href="#cmdoption-schvalidator-schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Points to the Schematron file</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-schvalidator-arg-xmlfile">
+<code class="descname">XMLFILE</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-schvalidator-arg-xmlfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to the XML file to validate</p>
+</dd></dl>
+
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s assume we have the following ISO Schematron schema in <code class="file docutils literal"><span class="pre">root.sch</span></code>.
+The Schematron schema checks if the root element contains a <code class="docutils literal"><span class="pre">version</span></code>
+and a <code class="docutils literal"><span class="pre">xml:id</span></code> attribute. If one or both are not available it prints
+the error message inside the <code class="docutils literal"><span class="pre">sch:assert</span></code> element.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;sch:schema</span> <span class="na">id=</span><span class="s">&quot;schematron-001.sch&quot;</span> <span class="na">queryBinding=</span><span class="s">&quot;xslt&quot;</span>
+            <span class="na">xmlns:d=</span><span class="s">&quot;http://docbook.org/ns/docbook&quot;</span>
+            <span class="na">xmlns:sch=</span><span class="s">&quot;http://purl.oclc.org/dsdl/schematron&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;sch:pattern&gt;</span>
+        <span class="nt">&lt;sch:title&gt;</span>Rules<span class="nt">&lt;/sch:title&gt;</span>
+        <span class="nt">&lt;sch:rule</span> <span class="na">context=</span><span class="s">&quot;/*&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;sch:assert</span> <span class="na">test=</span><span class="s">&quot;@version and @xml:id&quot;</span><span class="nt">&gt;</span>
+            Root element needs @version and @xml:id attributes!
+        <span class="nt">&lt;/sch:assert&gt;</span>
+        <span class="nt">&lt;/sch:rule&gt;</span>
+    <span class="nt">&lt;/sch:pattern&gt;</span>
+<span class="nt">&lt;/sch:schema&gt;</span>
+</pre></div>
+</div>
+<p>Your DocBook 5 source is saved in file <code class="file docutils literal"><span class="pre">article.xml</span></code>:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;article</span> <span class="na">xml:id=</span><span class="s">&quot;article&quot;</span>
+         <span class="na">xmlns=</span><span class="s">&quot;http://docbook.org/ns/docbook&quot;</span>
+         <span class="na">xmlns:xlink=</span><span class="s">&quot;http://www.w3.org/1999/xlink&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;title&gt;</span>Article Validated with Schematron<span class="nt">&lt;/title&gt;</span>
+   <span class="nt">&lt;para&gt;</span>bla<span class="nt">&lt;/para&gt;</span>
+<span class="nt">&lt;/article&gt;</span>
+</pre></div>
+</div>
+<p>Run the script <strong class="program">schvalidator</strong> like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ schvalidator --schema root.sch article.xml
+</pre></div>
+</div>
+<p>it gives you the following output:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>[INFO]: No. 1
+    Location: &quot;/*[local-name()=&#39;article&#39; and namespace-uri()=&#39;http://docbook.org/ns/docbook&#39;]&quot;
+    Message: Root element needs @version and @xml:id attributes!
+--------------------
+[CRITICAL]: Validation failed!
+</pre></div>
+</div>
+<p>If the <a class="reference internal" href="#cmdoption-schvalidator-report"><code class="xref std std-option docutils literal"><span class="pre">--report</span></code></a> option is used, you can save the
+resulting validation report to a file. In this case, the validation
+report contains the following elements:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;svrl:schematron-output</span> <span class="na">schemaVersion=</span><span class="s">&quot;&quot;</span> <span class="na">title=</span><span class="s">&quot;root.sch&quot;</span>
+    <span class="na">xmlns:iso=</span><span class="s">&quot;http://purl.oclc.org/dsdl/schematron&quot;</span>
+    <span class="na">xmlns:sch=</span><span class="s">&quot;http://www.ascc.net/xml/schematron&quot;</span>
+    <span class="na">xmlns:schold=</span><span class="s">&quot;http://www.ascc.net/xml/schematron&quot;</span>
+    <span class="na">xmlns:svrl=</span><span class="s">&quot;http://purl.oclc.org/dsdl/svrl&quot;</span>
+    <span class="na">xmlns:xs=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;svrl:active-pattern</span> <span class="na">name=</span><span class="s">&quot;Rules&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;svrl:fired-rule</span> <span class="na">context=</span><span class="s">&quot;/*&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;svrl:failed-assert</span>
+        <span class="na">location=</span><span class="s">&quot;/*[local-name()=&#39;article&#39; and namespace-uri()=&#39;http://docbook.org/ns/docbook&#39;]&quot;</span>
+        <span class="na">test=</span><span class="s">&quot;@version and @xml:id&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;svrl:text&gt;</span> Root element needs @version and @xml:id attributes!
+        <span class="nt">&lt;/svrl:text&gt;</span>
+    <span class="nt">&lt;/svrl:failed-assert&gt;</span>
+<span class="nt">&lt;/svrl:schematron-output&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="diagnostics">
+<h2>Diagnostics<a class="headerlink" href="#diagnostics" title="Permalink to this headline">¶</a></h2>
+<p><strong class="program">schvalidator</strong> return codes provide information
+that can be used when calling it from scripts.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>0</td>
+<td>no error</td>
+</tr>
+<tr class="row-even"><td>10</td>
+<td>no Schematron schema or XML file found</td>
+</tr>
+<tr class="row-odd"><td>20</td>
+<td>XML or Schematron error</td>
+</tr>
+<tr class="row-even"><td>30</td>
+<td>file not found or general OS error</td>
+</tr>
+<tr class="row-odd"><td>200</td>
+<td>validation failed</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="see-also">
+<h2>See also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<p><em class="manpage">jing(1)</em>, <em class="manpage">xmllint(1)</em></p>
+</div>
+<div class="section" id="author">
+<h2>Author<a class="headerlink" href="#author" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>Thomas Schraitle &lt;toms(AT)opensuse.org&gt;</div></blockquote>
+</div>
+</div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+      </div><!-- /row -->
+
+      <!-- row -->
+      <div class="row footer-relbar">
+<div id="navbar-related" class=" related navbar navbar-default" role="navigation" aria-label="related navigation">
+  <div class="navbar-inner">
+    <ul class="nav navbar-nav ">
+        <li><a href="index.html">schvalidator 0.1.1 documentation</a></li>
+    </ul>
+<ul class="nav navbar-nav pull-right hidden-xs hidden-sm">
+      
+        <li><a href="index.html" title="Welcome to schvalidator’s Documentation!" >previous</a></li>
+        <li><a href="genindex.html" title="General Index" >index</a></li>
+        <li><a href="#">top</a></li> 
+      
+    </ul>
+  </div>
+</div>
+      </div><!-- /row -->
+
+      <!-- footer -->
+      <footer role="contentinfo">
+          &copy; Copyright 2016-2017, SUSE Linux GmbH.
+        Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.5.1.
+      </footer>
+      <!-- /footer -->
+
+    </div>
+    <!-- /container -->
+
+  </body>
+</html>
