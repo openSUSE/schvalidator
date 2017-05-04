@@ -138,9 +138,9 @@ def process(args):
 
     if reportfile is not None:
         schematron.validation_report.write(reportfile,
-                                               pretty_print=True,
-                                               encoding="utf-8",
-                                               )
+                                           pretty_print=True,
+                                           encoding="utf-8",
+                                           )
         log.info("Wrote Schematron validation report to %r", reportfile)
     else:
         log.debug(schematron.validation_report)

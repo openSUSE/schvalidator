@@ -16,8 +16,6 @@
 # To contact SUSE about this file by physical or electronic mail,
 # you may find current contact information at www.suse.com
 
-__all__ = ['ERROR_CODES',]
-
 from .exceptions import ProjectFilesNotFoundError
 from lxml.etree import (SchematronParseError,
                         XMLSyntaxError,
@@ -26,17 +24,20 @@ from lxml.etree import (SchematronParseError,
                         )
 
 
+__all__ = ['ERROR_CODES']
+
+
 # Error codes
 # Make an error dictionary that contains both the class and its
 # string representation
 ERROR_CODES = dict()
 for _error, _rc in [(ProjectFilesNotFoundError, 10),
-                  (XMLSyntaxError, 20),
-                  (XSLTApplyError, 20),
-                  (SchematronParseError, 20),
-                  (XSLTParseError, 30),
-                  (FileNotFoundError, 40),
-                  (OSError, 40),
-                  ]:
+                    (XMLSyntaxError, 20),
+                    (XSLTApplyError, 20),
+                    (SchematronParseError, 20),
+                    (XSLTParseError, 30),
+                    (FileNotFoundError, 40),
+                    (OSError, 40),
+                    ]:
     ERROR_CODES[_error] = _rc
     ERROR_CODES[repr(_error)] = _rc
