@@ -16,7 +16,11 @@ License: GPL 3+
     :target: https://codecov.io/github/openSUSE/schvalidator?branch=develop
     :alt: Code Coverage
 
-‟A feather duster to reach the parts other schema languages cannot reach.” -- Rick Jelliffe
+.. epigraph::
+
+    ‟A feather duster to reach the parts other schema languages cannot reach.”
+
+    -- Rick Jelliffe
 
 The :program:`schvalidator` script validates a given XML file with a
 `ISO Schematron schema <https://en.wikipedia.org/wiki/Schematron>`_.
