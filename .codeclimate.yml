@@ -19,14 +19,16 @@ ratings:
         - "src/schvalidator/**"
 
 exclude_paths:
-    - tests/**
-    - test/**
+    - build/**
     - docs/**
     - dist/**
-    - build/**
+    - tests/**
+    - test/**
     - "*.cfg"
     - "*.in"
-    - "LICENSE"
     - "*.txt"
     - "*.rst"
+    - "ChangeLog"
+    - "LICENSE"
+    - "setup.py"
 
