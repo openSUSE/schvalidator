@@ -103,30 +103,21 @@ def test_main_mock_parsecli_process(monkeypatch):
     assert schvalidator.cli.main() == -1
 
 
+@patch('schvalidator.cli.process')
+@patch('schvalidator.cli.parsecli')
+@patch('schvalidator.cli.check_files')
 @pytest.mark.parametrize("excpt,data", [
     (etree.XMLSyntaxError, ["msg", "x", 1, 1]),
     (etree.XSLTApplyError, ["msg"]),
 ])
-def test_main_raise_etree(monkeypatch, excpt, data):
-    """ """
-    def mock_parsecli(cliargs=None):
-        return {'--schema': "s.sch",
-                '--phase': None,
-                'XMLFILE':  "a.xml",
-                }
-    def mock_process(args):
-        raise excpt(*data)
-
-    monkeypatch.setattr(schvalidator.cli,
-                        'parsecli',
-                        mock_parsecli)
-    monkeypatch.setattr(schvalidator.schematron,
-                        'process',
-                        mock_process)
-
+def test_main_raise_etree(mock_check_files, mock_parsecli, mock_process,
+                           excpt, data,):
+    mock_parsecli.return_value = None
+    mock_check_files.return_value = None
+    mock_process.side_effect = excpt(*data)
     result = schvalidator.cli.main()
-    #  == ERROR_CODES[excpt]
-    assert result
+
+    assert result == ERROR_CODES[excpt]
 
 
 @pytest.mark.parametrize("excpt", [

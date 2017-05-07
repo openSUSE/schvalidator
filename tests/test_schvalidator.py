@@ -34,21 +34,19 @@ def test_main(capsys):
         exec(compile(open(path).read(), path, "exec"), {}, {"__name__": "__main__"})
 
 
+@patch('schvalidator.cli.parsecli')
+@patch('schvalidator.cli.check_files')
 @pytest.mark.parametrize('schema,xmlfile', [
     (None, "foo.xml"),
-    ("schema.sch", None),
+    ("schema.sch", ""),
 ])
-def test_main_with_exception(monkeypatch, schema, xmlfile):
-    # Patching etree.parse
-    def mock_parsecli(cliargs=None):
-        return {'--schema': schema,
-                'XMLFILE': xmlfile,
-                }
-    monkeypatch.setattr('schvalidator.cli.parsecli',
-                        mock_parsecli)
+def test_main_with_exception(mock_check_files, mock_parsecli,
+                             schema, xmlfile):
+    mock_check_files.return_value = None
+    mock_parsecli.return_value = {'--schema': schema, 'XMLFILE': xmlfile, '--phase': None}
     result = schvalidator.cli.main(["", "--schema", "schema.sch"])
-    # == ERROR_CODES[FileNotFoundError]
-    assert result != 0
+    #
+    assert result == ERROR_CODES[FileNotFoundError]
 
 
 def test_version(capsys):
