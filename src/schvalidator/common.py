@@ -61,16 +61,16 @@ LOGLEVELS = {None: WARNING,  # 0
              }
 
 #: Map log numbers to log names
-LOGNAMES = { NOTSET: 'NOTSET',     # 0
-             None:  'NOTSET',
-             DEBUG:  'DEBUG',      # 10
-             INFO:   'INFO',       # 20
-             WARN:    'WARNING',   # 30
-             WARNING: 'WARNING',   # 30
-             ERROR:  'ERROR',      # 40
-             CRITICAL: 'CRITICAL', # 50
-             FATAL: 'CRITICAL',    # 50
-             }
+LOGNAMES = {NOTSET: 'NOTSET',      # 0
+            None: 'NOTSET',
+            DEBUG: 'DEBUG',        # 10
+            INFO: 'INFO',          # 20
+            WARN: 'WARNING',       # 30
+            WARNING: 'WARNING',    # 30
+            ERROR: 'ERROR',        # 40
+            CRITICAL: 'CRITICAL',  # 50
+            FATAL: 'CRITICAL',     # 50
+            }
 
 #: Dictionary: mapping between ``role`` attribute and log level
 ROLEDICT = {None: INFO,  # if no role is set, use INFO
@@ -80,39 +80,34 @@ ROLEDICT = {None: INFO,  # if no role is set, use INFO
             'information': INFO,
             'error': ERROR,
             'fatal': FATAL,
-}
+            }
 
 DEBUG_FORMAT = "[%(levelname)s] %(name)s:%(lineno)s %(message)s"
 # SIMPLE_FORMAT = "%(levelname)s:%(name)s:%(message)s"
 
+
+#: Default logging dict for :class:`logging.config.dictConfig`:
 DEFAULT_LOGGING_DICT = {
-        'version': 1,
-        'formatters': {'schvalidator': {'format': DEBUG_FORMAT,
-                                     'datefmt': '%Y%m%dT%H:%M:%S'},
-                       'default': {'format': BASIC_FORMAT,
-                                   'datefmt': '%Y-%m-%d %H:%M:%S'},
-                       },
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler',
-                'level': 'NOTSET',
-                'formatter': 'default',
-            },
-            'schvalidator': {
-                'class': 'logging.StreamHandler',
-                'level': 'DEBUG',
-                'formatter': 'schvalidator',
-            },
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '[%(levelname)s] %(name)s: %(message)s'
         },
-        'loggers': {
-            'schvalidator': {
-                'handlers': ['schvalidator'],
-                'propagate': False,
-            }
+    },
+    'handlers': {
+        'default': {
+            'level': 'NOTSET',
+            'formatter': 'standard',
+            'class': 'logging.StreamHandler',
+            # 'stream': 'ext://sys.stderr',
         },
-        'root': {
-            'level': 'DEBUG',
-            # Default %(levelname)s:%(name)s:%(message)s
-            # 'handlers': ['console'],
-        },
+    },
+    'loggers': {
+        'schvalidator': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': True
+        }
     }
+}

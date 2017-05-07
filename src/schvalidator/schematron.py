@@ -132,7 +132,7 @@ def process_result_svrl(report):
                 "\tLocation: %r\n"
                 "\tMessage:%s\n"
                 "%s",
-                idx, loc, text, "-"*20)
+                idx, loc, text, "-" * 20)
 
 
 def process(args):
