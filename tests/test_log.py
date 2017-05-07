@@ -20,7 +20,8 @@
 import logging
 import pytest
 
-from schvalidator.log import role2level, ROLEDICT
+from schvalidator.schematron import role2level
+from schvalidator.common import ROLEDICT
 
 
 @pytest.mark.parametrize("test_input, expected", ROLEDICT.items())

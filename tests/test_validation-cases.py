@@ -22,14 +22,12 @@ from lxml import etree
 import pytest
 import sys
 
-from schvalidator.log import setloglevel
 from schvalidator.schematron import NS, validate_sch
 
 
 def test_validation(schtestcase):
     """Run one test case"""
     xmlfile, schema, svrl = schtestcase
-    setloglevel(logging.NOTSET)
 
     result, schematron = validate_sch(str(schema), str(xmlfile))
     report = schematron.validation_report

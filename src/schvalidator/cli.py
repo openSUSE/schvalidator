@@ -37,13 +37,16 @@ Options:
 
 
 from docopt import docopt
-# from docopt import printable_usage
+import logging
+from logging.config import dictConfig
 from lxml import etree
 
-from .common import ERROR_CODES
+from .common import DEFAULT_LOGGING_DICT, ERROR_CODES, LOGLEVELS, LOGNAMES
 from .exceptions import ProjectFilesNotFoundError
-from .log import log, setloglevel
 from .schematron import process
+
+#: Use __package__, not __name__ here to set overall logging level:
+log = logging.getLogger(__package__)
 
 
 def parsecli(cliargs=None):
@@ -56,9 +59,10 @@ def parsecli(cliargs=None):
     from schvalidator import __version__
     version = "%s %s" % (__package__, __version__)
     args = docopt(__doc__, argv=cliargs, version=version)
-    # verbose = args['-v'] if args['-v'] else None
-    setloglevel(args['-v'])
-    log.debug("Got the following options and arguments: %s", args)
+    dictConfig(DEFAULT_LOGGING_DICT)
+    log.setLevel(LOGLEVELS.get(args['-v'], logging.DEBUG))
+
+    log.debug("CLI result: %s", args)
     return args
 
 

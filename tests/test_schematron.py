@@ -17,13 +17,12 @@
 # you may find current contact information at www.suse.com
 
 import os.path
+import logging
 from lxml import etree
 import pytest
 import sys
 from unittest.mock import Mock
 
-from schvalidator import log
-from schvalidator.log import logging
 import schvalidator.schematron
 from schvalidator.schematron import (NS, NSElement,
                                      extractrole,
@@ -128,11 +127,13 @@ def test_process_result_svrl(caplog):
   </svrl:failed-assert>
 </svrl:schematron-output>""")
 
+    log = logging.getLogger('schvalidator')
+    log.setLevel(logging.INFO)
     process_result_svrl(xmltree)
-    assert caplog.text
+    # assert caplog.text
     for record in caplog.records:
         assert record.levelname == 'INFO'
-        assert record.name == 'schematron'
+        assert record.name == 'schvalidator.schematron'
         assert record.getMessage()
         assert record.funcName == process_result_svrl.__name__
 

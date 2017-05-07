@@ -16,9 +16,13 @@
 # To contact SUSE about this file by physical or electronic mail,
 # you may find current contact information at www.suse.com
 
-from .log import log, role2level, schlog
+from .common import ROLEDICT
+import logging
 from lxml import etree
 from lxml.isoschematron import Schematron
+
+log = logging.getLogger(__name__)
+
 
 # Common namespaces
 NS = dict(svrl="http://purl.oclc.org/dsdl/svrl",
@@ -52,6 +56,14 @@ class NSElement(object):
 
 
 svrl = NSElement(NS['svrl'])
+
+
+def role2level(rolelevel):
+    """Return the log level
+    :param str rolelevel: The value of the ``role`` attribute
+    :return: int
+    """
+    return ROLEDICT.get(rolelevel)
 
 
 def validate_sch(schema, xmlfile, phase=None, xmlparser=None):
@@ -115,12 +127,12 @@ def process_result_svrl(report):
         # The ``role`` attribute contains contains the log level
         level = role2level(extractrole(fa))
 
-        schlog.log(level,
-                   "No. %i\n"
-                   "\tLocation: %r\n"
-                   "\tMessage:%s\n"
-                   "%s",
-                   idx, loc, text, "-"*20)
+        log.log(level,
+                "No. %i\n"
+                "\tLocation: %r\n"
+                "\tMessage:%s\n"
+                "%s",
+                idx, loc, text, "-" * 20)
 
 
 def process(args):
@@ -148,8 +160,8 @@ def process(args):
     process_result_svrl(schematron.validation_report)
 
     if not result:
-        schlog.fatal("Validation failed!")
+        log.fatal("Validation failed!")
         return 200
     else:
-        schlog.info("Validation was successful")
+        log.info("Validation was successful")
     return 0
