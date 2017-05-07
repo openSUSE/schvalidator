@@ -18,6 +18,7 @@
 
 
 from lxml import etree
+import py.path
 import pytest
 from unittest.mock import patch
 
@@ -25,6 +26,9 @@ import schvalidator
 from schvalidator.cli import parsecli
 from schvalidator.common import ERROR_CODES
 from schvalidator.exceptions import ProjectFilesNotFoundError
+
+TESTDIR = py.path.local(__file__).dirpath()
+DATADIR = TESTDIR / "data"
 
 
 @pytest.mark.parametrize('cli,expected', [
@@ -71,11 +75,11 @@ def test_main_mock_parsecli(monkeypatch):
                 'XMLFILE':  None,
                 }
 
-    monkeypatch.setattr(schvalidator,
+    monkeypatch.setattr(schvalidator.cli,
                         'parsecli',
                         mock_parsecli)
 
-    result = schvalidator.main()
+    result = schvalidator.cli.main()
     assert result == ERROR_CODES[ProjectFilesNotFoundError]
 
 
@@ -90,37 +94,29 @@ def test_main_mock_parsecli_process(monkeypatch):
         # Use a return code that is never be used in schvalidator:
         return -1
 
-    monkeypatch.setattr(schvalidator,
+    monkeypatch.setattr(schvalidator.cli,
                         'parsecli',
                         mock_parsecli)
-    monkeypatch.setattr(schvalidator,
+    monkeypatch.setattr(schvalidator.cli,
                         'process',
                         mock_process)
-    assert schvalidator.main() == -1
+    assert schvalidator.cli.main() == -1
 
 
+@patch('schvalidator.cli.process')
+@patch('schvalidator.cli.parsecli')
+@patch('schvalidator.cli.check_files')
 @pytest.mark.parametrize("excpt,data", [
     (etree.XMLSyntaxError, ["msg", "x", 1, 1]),
     (etree.XSLTApplyError, ["msg"]),
 ])
-def test_main_raise_etree(monkeypatch, excpt, data):
-    """ """
-    def mock_parsecli(cliargs=None):
-        return {'--schema': "s.sch",
-                '--phase': None,
-                'XMLFILE':  "a.xml",
-                }
-    def mock_process(args):
-        raise excpt(*data)
+def test_main_raise_etree(mock_check_files, mock_parsecli, mock_process,
+                           excpt, data,):
+    mock_parsecli.return_value = None
+    mock_check_files.return_value = None
+    mock_process.side_effect = excpt(*data)
+    result = schvalidator.cli.main()
 
-    monkeypatch.setattr(schvalidator,
-                        'parsecli',
-                        mock_parsecli)
-    monkeypatch.setattr(schvalidator,
-                        'process',
-                        mock_process)
-
-    result = schvalidator.main()
     assert result == ERROR_CODES[excpt]
 
 
@@ -136,12 +132,12 @@ def test_main_raise_OSError(monkeypatch, excpt):
     def mock_process(args):
         raise excpt()
 
-    monkeypatch.setattr(schvalidator,
+    monkeypatch.setattr(schvalidator.cli,
                         'parsecli',
                         mock_parsecli)
-    monkeypatch.setattr(schvalidator,
+    monkeypatch.setattr(schvalidator.schematron,
                         'process',
                         mock_process)
 
-    result = schvalidator.main()
+    result = schvalidator.cli.main()
     assert result == ERROR_CODES[excpt]

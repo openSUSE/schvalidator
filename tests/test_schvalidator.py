@@ -34,22 +34,25 @@ def test_main(capsys):
         exec(compile(open(path).read(), path, "exec"), {}, {"__name__": "__main__"})
 
 
+@patch('schvalidator.cli.parsecli')
+@patch('schvalidator.cli.check_files')
 @pytest.mark.parametrize('schema,xmlfile', [
     (None, "foo.xml"),
-    ("schema.sch", None),
+    ("schema.sch", ""),
 ])
-def test_main_with_exception(monkeypatch, schema, xmlfile):
-    # Patching etree.parse
-    monkeypatch.setattr('schvalidator.cli.parsecli',
-                        {'--schema': schema, 'XMLFILE': xmlfile})
-    result = schvalidator.main(["", "--schema", "schema.sch"])
+def test_main_with_exception(mock_check_files, mock_parsecli,
+                             schema, xmlfile):
+    mock_check_files.return_value = None
+    mock_parsecli.return_value = {'--schema': schema, 'XMLFILE': xmlfile, '--phase': None}
+    result = schvalidator.cli.main(["", "--schema", "schema.sch"])
+    #
     assert result == ERROR_CODES[FileNotFoundError]
 
 
 def test_version(capsys):
     """Checks for correct version"""
     with pytest.raises(SystemExit):
-        schvalidator.main(["", "--version"])
+        schvalidator.cli.main(["", "--version"])
     out, _ = capsys.readouterr()
     assert out == "schvalidator {0}\n".format(schvalidator.__version__)
 
@@ -58,7 +61,7 @@ def test_help(capsys):
     """Checks for help output"""
     from schvalidator.cli import __doc__
     with pytest.raises(SystemExit):
-        schvalidator.main(["", "--help"])
+        schvalidator.cli.main(["", "--help"])
     out, _ = capsys.readouterr()
     assert out == __doc__.lstrip()
 
@@ -66,4 +69,4 @@ def test_help(capsys):
 def test_invalid():
     """Checks for invalid option"""
     with pytest.raises(docopt.DocoptExit):
-        schvalidator.main(["", "--asdf"])
+        schvalidator.cli.main(["", "--asdf"])

@@ -37,8 +37,13 @@ Options:
 
 
 from docopt import docopt
+# from docopt import printable_usage
+from lxml import etree
 
+from .common import ERROR_CODES
+from .exceptions import ProjectFilesNotFoundError
 from .log import log, setloglevel
+from .schematron import process
 
 
 def parsecli(cliargs=None):
@@ -55,3 +60,51 @@ def parsecli(cliargs=None):
     setloglevel(args['-v'])
     log.debug("Got the following options and arguments: %s", args)
     return args
+
+
+def check_files(args):
+    """Checks XML and Schematron files in dictionary
+
+    :param dict args: Dictionary from docopt
+    """
+    for f, msg in ((args['XMLFILE'], "Need a XML file."),
+                   (args['--schema'], "Need a Schematron schema.")):
+        if f is None:
+            print(__doc__)
+            raise ProjectFilesNotFoundError(msg)
+
+
+def main(cliargs=None):
+    """Entry point for the application script
+
+    :param list cliargs: Arguments to parse or None (=use sys.argv)
+    :return: return codes from ``ERROR_CODES``
+    """
+
+    try:
+        args = parsecli(cliargs)
+        check_files(args)
+        return process(args)
+
+    except (ProjectFilesNotFoundError) as error:
+        log.fatal(error)
+        return ERROR_CODES.get(repr(type(error)), 255)
+
+    except (etree.XMLSyntaxError,
+            etree.XSLTApplyError,
+            etree.SchematronParseError) as error:
+        log.fatal(error)
+        return ERROR_CODES.get(repr(type(error)), 255)
+
+    # except etree.SchematronParseError as error:
+    #    log.fatal("Schematron file %r error", args['--schema'])
+    #    log.fatal(error)
+    #    return ERROR_CODES.get(repr(type(error)), 255)
+
+    except etree.XSLTParseError as error:
+        log.fatal(error.error_log)
+        return ERROR_CODES.get(type(error), 255)
+
+    except (FileNotFoundError, OSError) as error:
+        log.fatal(error)
+        return ERROR_CODES.get(repr(type(error)), 255)

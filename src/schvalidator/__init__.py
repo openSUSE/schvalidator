@@ -17,68 +17,25 @@
 # you may find current contact information at www.suse.com
 
 """
+schvalidator Module
+===================
+
+.. default-domain:: py
+
 Validates an XML file with a Schematron schema
 """
 
-from .cli import parsecli
-from .cli import __doc__ as clidoc
-from .common import ERROR_CODES
-from docopt import printable_usage
-from .exceptions import ProjectFilesNotFoundError
-from .log import log
-from .schematron import process
-from lxml import etree
-import sys
+import logging
 
 
 __version__ = "0.1.1"  # flake8: noqa
-__author__ = "Thomas Schraitle <toms (AT) suse DOT de>"  # flake8: noqa
-__all__ = ('__author__',
-           '__version__',
-           'main',
-           'parsecli',
-           'log',
-           )  # flake8: noqa
+__author__ = "Thomas Schraitle"  # flake8: noqa
+__proc__ = "schvalidator"
+__url__ = "https://github.com/openSUSE/schvalidator"
+__email__ = "tom_schr (AT) suse DOT de"
+__summary__ = __doc__
 
 
-def check_files(args):
-    """Checks XML and Schematron files in dictionary
-
-    :param dict args: Dictionary from docopt
-    """
-    for f, msg in ((args['XMLFILE'], "Need a XML file."),
-                   (args['--schema'], "Need a Schematron schema.")):
-        if f is None:
-            print(clidoc)
-            raise ProjectFilesNotFoundError(msg)
-
-
-def main(cliargs=None):
-    """Entry point for the application script
-
-    :param list cliargs: Arguments to parse or None (=use sys.argv)
-    :return: return codes from ``ERROR_CODES``
-    """
-
-    try:
-        args = parsecli(cliargs)
-        check_files(args)
-        return process(args)
-
-    except (ProjectFilesNotFoundError) as error:
-        log.fatal(error)
-        return ERROR_CODES.get(repr(type(error)), 255)
-
-    except (etree.XMLSyntaxError,
-            etree.XSLTApplyError,
-            etree.SchematronParseError) as error:
-        log.fatal(error)
-        return ERROR_CODES.get(repr(type(error)), 255)
-
-    except etree.XSLTParseError as error:
-        log.fatal(error.error_log)
-        return ERROR_CODES.get(type(error), 255)
-
-    except (FileNotFoundError, OSError) as error:
-        log.fatal(error)
-        return ERROR_CODES.get(repr(type(error)), 255)
+#: Set default logging handler to avoid "No handler found" warnings.
+# See https://docs.python.org/3/howto/logging.html#library-config
+logging.getLogger().addHandler(logging.NullHandler())
