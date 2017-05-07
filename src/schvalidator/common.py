@@ -17,6 +17,16 @@
 # you may find current contact information at www.suse.com
 
 from .exceptions import ProjectFilesNotFoundError
+from logging import (BASIC_FORMAT,
+                     CRITICAL,
+                     DEBUG,
+                     FATAL,
+                     ERROR,
+                     INFO,
+                     NOTSET,
+                     WARN,
+                     WARNING,
+                     )
 from lxml.etree import (SchematronParseError,
                         XMLSyntaxError,
                         XSLTApplyError,
@@ -41,3 +51,68 @@ for _error, _rc in [(ProjectFilesNotFoundError, 10),
                     ]:
     ERROR_CODES[_error] = _rc
     ERROR_CODES[repr(_error)] = _rc
+
+
+#: Map verbosity to log levels
+LOGLEVELS = {None: WARNING,  # 0
+             0: WARNING,
+             1: INFO,
+             2: DEBUG,
+             }
+
+#: Map log numbers to log names
+LOGNAMES = { NOTSET: 'NOTSET',     # 0
+             None:  'NOTSET',
+             DEBUG:  'DEBUG',      # 10
+             INFO:   'INFO',       # 20
+             WARN:    'WARNING',   # 30
+             WARNING: 'WARNING',   # 30
+             ERROR:  'ERROR',      # 40
+             CRITICAL: 'CRITICAL', # 50
+             FATAL: 'CRITICAL',    # 50
+             }
+
+#: Dictionary: mapping between ``role`` attribute and log level
+ROLEDICT = {None: INFO,  # if no role is set, use INFO
+            'warn': WARN,
+            'warning': WARN,
+            'info': INFO,
+            'information': INFO,
+            'error': ERROR,
+            'fatal': FATAL,
+}
+
+DEBUG_FORMAT = "[%(levelname)s] %(name)s:%(lineno)s %(message)s"
+# SIMPLE_FORMAT = "%(levelname)s:%(name)s:%(message)s"
+
+DEFAULT_LOGGING_DICT = {
+        'version': 1,
+        'formatters': {'schvalidator': {'format': DEBUG_FORMAT,
+                                     'datefmt': '%Y%m%dT%H:%M:%S'},
+                       'default': {'format': BASIC_FORMAT,
+                                   'datefmt': '%Y-%m-%d %H:%M:%S'},
+                       },
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+                'level': 'NOTSET',
+                'formatter': 'default',
+            },
+            'schvalidator': {
+                'class': 'logging.StreamHandler',
+                'level': 'DEBUG',
+                'formatter': 'schvalidator',
+            },
+        },
+        'loggers': {
+            'schvalidator': {
+                'handlers': ['schvalidator'],
+                'propagate': False,
+            }
+        },
+        'root': {
+            'level': 'DEBUG',
+            # Default %(levelname)s:%(name)s:%(message)s
+            # 'handlers': ['console'],
+        },
+    }
