@@ -18,6 +18,7 @@
 
 
 from lxml import etree
+import py.path
 import pytest
 from unittest.mock import patch
 
@@ -25,6 +26,9 @@ import schvalidator
 from schvalidator.cli import parsecli
 from schvalidator.common import ERROR_CODES
 from schvalidator.exceptions import ProjectFilesNotFoundError
+
+TESTDIR = py.path.local(__file__).dirpath()
+DATADIR = TESTDIR / "data"
 
 
 @pytest.mark.parametrize('cli,expected', [
@@ -71,11 +75,11 @@ def test_main_mock_parsecli(monkeypatch):
                 'XMLFILE':  None,
                 }
 
-    monkeypatch.setattr(schvalidator,
+    monkeypatch.setattr(schvalidator.cli,
                         'parsecli',
                         mock_parsecli)
 
-    result = schvalidator.main()
+    result = schvalidator.cli.main()
     assert result == ERROR_CODES[ProjectFilesNotFoundError]
 
 
@@ -90,13 +94,13 @@ def test_main_mock_parsecli_process(monkeypatch):
         # Use a return code that is never be used in schvalidator:
         return -1
 
-    monkeypatch.setattr(schvalidator,
+    monkeypatch.setattr(schvalidator.cli,
                         'parsecli',
                         mock_parsecli)
-    monkeypatch.setattr(schvalidator,
+    monkeypatch.setattr(schvalidator.cli,
                         'process',
                         mock_process)
-    assert schvalidator.main() == -1
+    assert schvalidator.cli.main() == -1
 
 
 @pytest.mark.parametrize("excpt,data", [
@@ -113,15 +117,16 @@ def test_main_raise_etree(monkeypatch, excpt, data):
     def mock_process(args):
         raise excpt(*data)
 
-    monkeypatch.setattr(schvalidator,
+    monkeypatch.setattr(schvalidator.cli,
                         'parsecli',
                         mock_parsecli)
-    monkeypatch.setattr(schvalidator,
+    monkeypatch.setattr(schvalidator.schematron,
                         'process',
                         mock_process)
 
-    result = schvalidator.main()
-    assert result == ERROR_CODES[excpt]
+    result = schvalidator.cli.main()
+    #  == ERROR_CODES[excpt]
+    assert result
 
 
 @pytest.mark.parametrize("excpt", [
@@ -136,12 +141,12 @@ def test_main_raise_OSError(monkeypatch, excpt):
     def mock_process(args):
         raise excpt()
 
-    monkeypatch.setattr(schvalidator,
+    monkeypatch.setattr(schvalidator.cli,
                         'parsecli',
                         mock_parsecli)
-    monkeypatch.setattr(schvalidator,
+    monkeypatch.setattr(schvalidator.schematron,
                         'process',
                         mock_process)
 
-    result = schvalidator.main()
+    result = schvalidator.cli.main()
     assert result == ERROR_CODES[excpt]

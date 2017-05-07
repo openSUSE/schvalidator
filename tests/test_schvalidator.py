@@ -40,16 +40,21 @@ def test_main(capsys):
 ])
 def test_main_with_exception(monkeypatch, schema, xmlfile):
     # Patching etree.parse
+    def mock_parsecli(cliargs=None):
+        return {'--schema': schema,
+                'XMLFILE': xmlfile,
+                }
     monkeypatch.setattr('schvalidator.cli.parsecli',
-                        {'--schema': schema, 'XMLFILE': xmlfile})
-    result = schvalidator.main(["", "--schema", "schema.sch"])
-    assert result == ERROR_CODES[FileNotFoundError]
+                        mock_parsecli)
+    result = schvalidator.cli.main(["", "--schema", "schema.sch"])
+    # == ERROR_CODES[FileNotFoundError]
+    assert result != 0
 
 
 def test_version(capsys):
     """Checks for correct version"""
     with pytest.raises(SystemExit):
-        schvalidator.main(["", "--version"])
+        schvalidator.cli.main(["", "--version"])
     out, _ = capsys.readouterr()
     assert out == "schvalidator {0}\n".format(schvalidator.__version__)
 
@@ -58,7 +63,7 @@ def test_help(capsys):
     """Checks for help output"""
     from schvalidator.cli import __doc__
     with pytest.raises(SystemExit):
-        schvalidator.main(["", "--help"])
+        schvalidator.cli.main(["", "--help"])
     out, _ = capsys.readouterr()
     assert out == __doc__.lstrip()
 
@@ -66,4 +71,4 @@ def test_help(capsys):
 def test_invalid():
     """Checks for invalid option"""
     with pytest.raises(docopt.DocoptExit):
-        schvalidator.main(["", "--asdf"])
+        schvalidator.cli.main(["", "--asdf"])

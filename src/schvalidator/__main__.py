@@ -19,7 +19,7 @@
 """Support 'python -m schvalidator' call with __main__.py"""
 
 import sys
-from schvalidator import main
+from schvalidator.cli import main
 
 
 if __name__ == "__main__":

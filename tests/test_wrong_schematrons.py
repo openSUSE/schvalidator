@@ -49,6 +49,6 @@ def test_use_wrong_schematron(tmpdir):
     schemafile.write(SCHEMATRON)
     xmlfile.write(XML)
 
-    result = schvalidator.main(['--schema', str(schemafile),
+    result = schvalidator.cli.main(['--schema', str(schemafile),
                            str(xmlfile)])
     assert result == ERROR_CODES.get(repr(XSLTParseError))

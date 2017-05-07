@@ -17,7 +17,7 @@ def test_filenotfound1():
 
 def test_filenotfound2():
     #
-    from schvalidator import main
+    from schvalidator.cli import main
 
     result = main(['--schema', 'schema-does-not-exist.sch',
               'file-does-not-exist.xml'])

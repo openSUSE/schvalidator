@@ -64,7 +64,7 @@ setupdict = dict(
    },
    entry_points={
         'console_scripts': [
-            'schvalidator=schvalidator:main',
+            'schvalidator=schvalidator.cli:main',
         ],
     },
 )
