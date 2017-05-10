@@ -22,7 +22,8 @@ from lxml import etree
 import pytest
 import sys
 
-from schvalidator.schematron import NS, validate_sch
+from schvalidator.schematron import validate_sch
+from schvalidator.common import NSMAP
 
 
 def test_validation(schtestcase):
@@ -39,6 +40,6 @@ def test_validation(schtestcase):
                  "//svrl:failed-assert/@role",
                  ]
     for expr in xpathexpr:
-        expected = svrltree.xpath(expr, namespaces=NS)
-        result = report.xpath(expr, namespaces=NS)
+        expected = svrltree.xpath(expr, namespaces=NSMAP)
+        result = report.xpath(expr, namespaces=NSMAP)
         assert expected == result

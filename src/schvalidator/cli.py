@@ -42,8 +42,13 @@ import logging
 from logging.config import dictConfig
 from lxml import etree
 
-from .common import DEFAULT_LOGGING_DICT, ERROR_CODES, LOGLEVELS, LOGNAMES
-from .exceptions import ProjectFilesNotFoundError
+from .common import (DEFAULT_LOGGING_DICT,
+                     errorcode, LOGLEVELS,
+                     )
+from .exceptions import (NoISOSchematronFileError,
+                         OldSchematronError,
+                         ProjectFilesNotFoundError,
+                         )
 from .schematron import process
 
 #: Use __package__, not __name__ here to set overall logging level:
@@ -93,23 +98,25 @@ def main(cliargs=None):
 
     except (ProjectFilesNotFoundError) as error:
         log.fatal(error)
-        return ERROR_CODES.get(repr(type(error)), 255)
+        return errorcode(error)
 
     except (etree.XMLSyntaxError,
             etree.XSLTApplyError,
             etree.SchematronParseError) as error:
         log.fatal(error)
-        return ERROR_CODES.get(repr(type(error)), 255)
+        return errorcode(error)
 
     # except etree.SchematronParseError as error:
     #    log.fatal("Schematron file %r error", args['SCHEMA'])
     #    log.fatal(error)
-    #    return ERROR_CODES.get(repr(type(error)), 255)
+    #    return errorcode(error)
 
     except etree.XSLTParseError as error:
         log.fatal(error.error_log)
-        return ERROR_CODES.get(type(error), 255)
+        return errorcode(error)
 
-    except (FileNotFoundError, OSError) as error:
+    except (FileNotFoundError, OSError,
+            NoISOSchematronFileError, OldSchematronError) as error:
         log.fatal(error)
-        return ERROR_CODES.get(repr(type(error)), 255)
+        return errorcode(error)
+

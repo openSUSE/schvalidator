@@ -24,10 +24,11 @@ import sys
 from unittest.mock import Mock
 
 import schvalidator.schematron
-from schvalidator.schematron import (NS, NSElement,
+from schvalidator.schematron import (NSElement,
                                      extractrole,
                                      process, process_result_svrl,
                                      svrl, validate_sch)
+from schvalidator.common import NSMAP
 
 
 def test_NSElement():
@@ -138,6 +139,7 @@ def test_process_result_svrl(caplog):
         assert record.funcName == process_result_svrl.__name__
 
 
+# @pytest.mark.skip
 @pytest.mark.parametrize('xmlparser', [
     None, "xmlparser"
 ])
@@ -157,6 +159,10 @@ def test_validate_sch(monkeypatch, xmlparser):
     monkeypatch.setattr(schvalidator.schematron,
                         'Schematron',
                         mock_schematron)
+    monkeypatch.setattr(schvalidator.schematron,
+                        'check4schematron',
+                        lambda x, y: None
+                        )
     result, schematron = validate_sch("fake.sch",
                                       "fake.xml",
                                       xmlparser=xmlparser)

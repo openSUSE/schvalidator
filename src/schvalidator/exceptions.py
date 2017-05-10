@@ -16,9 +16,23 @@
 # To contact SUSE about this file by physical or electronic mail,
 # you may find current contact information at www.suse.com
 
+"""Exception classes"""
+
 
 class ProjectFilesNotFoundError(FileNotFoundError):
     def __repr__(self):
         # print("ProjectFilesNotFoundError:", self.args)
         # return "%s %s" % (self.args[0], self.args[1])
         return "%s - %s" % (self.strerror, self.args[1])
+
+
+class BaseSchematronError(Exception):
+    pass
+
+
+class NoISOSchematronFileError(BaseSchematronError):
+    pass
+
+
+class OldSchematronError(BaseSchematronError):
+    pass
