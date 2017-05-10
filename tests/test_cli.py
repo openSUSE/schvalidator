@@ -61,6 +61,13 @@ DATADIR = TESTDIR / "data"
     'SCHEMA': 'schema.sch',
     'XMLFILE':  'a.xml'}
    ),
+   (['--phase', 'foo', '--report', 'report.svrl',
+     'schema.sch', 'a.xml'],
+   {'--phase': 'foo',
+    '--report': 'report.svrl',
+    'SCHEMA': 'schema.sch',
+    'XMLFILE':  'a.xml'}
+   ),
 ])
 def test_parsecli(cli, expected):
     result = parsecli(cli)
