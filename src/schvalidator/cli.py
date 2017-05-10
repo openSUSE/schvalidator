@@ -43,7 +43,7 @@ from logging.config import dictConfig
 from lxml import etree
 
 from .common import (DEFAULT_LOGGING_DICT,
-                     ERROR_CODES, LOGLEVELS, LOGNAMES
+                     errorcode, LOGLEVELS, LOGNAMES
                      )
 from .exceptions import (NoISOSchematronFileError,
                          OldSchematronError,
@@ -98,28 +98,28 @@ def main(cliargs=None):
 
     except (ProjectFilesNotFoundError) as error:
         log.fatal(error)
-        return ERROR_CODES.get(repr(type(error)), 255)
+        return errorcode(error)
 
     except (etree.XMLSyntaxError,
             etree.XSLTApplyError,
             etree.SchematronParseError) as error:
         log.fatal(error)
-        return ERROR_CODES.get(repr(type(error)), 255)
+        return errorcode(error)
 
     # except etree.SchematronParseError as error:
     #    log.fatal("Schematron file %r error", args['SCHEMA'])
     #    log.fatal(error)
-    #    return ERROR_CODES.get(repr(type(error)), 255)
+    #    return errorcode(error)
 
     except etree.XSLTParseError as error:
         log.fatal(error.error_log)
-        return ERROR_CODES.get(type(error), 255)
+        return errorcode(error)
 
     except (FileNotFoundError, OSError) as error:
         log.fatal(error)
-        return ERROR_CODES.get(repr(type(error)), 255)
+        return errorcode(error)
 
     except (NoISOSchematronFileError, OldSchematronError) as error:
         # print(repr(error))
         log.fatal(error)
-        return ERROR_CODES.get(repr(type(error)), 255)
+        return errorcode(error)

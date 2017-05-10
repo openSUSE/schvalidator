@@ -24,7 +24,7 @@ from unittest.mock import patch
 
 import schvalidator
 from schvalidator.cli import parsecli
-from schvalidator.common import ERROR_CODES
+from schvalidator.common import ERROR_CODES, errorcode
 from schvalidator.exceptions import (NoISOSchematronFileError,
                                      OldSchematronError,
                                      ProjectFilesNotFoundError,
@@ -32,6 +32,15 @@ from schvalidator.exceptions import (NoISOSchematronFileError,
 
 TESTDIR = py.path.local(__file__).dirpath()
 DATADIR = TESTDIR / "data"
+
+
+def test_errorcode():
+    for error in ERROR_CODES:
+        assert errorcode(error)
+
+
+def test_invalid_errorcode():
+    assert errorcode(ArithmeticError) == 255
 
 
 @pytest.mark.parametrize('cli,expected', [

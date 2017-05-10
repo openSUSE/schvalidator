@@ -64,6 +64,16 @@ for _error, _rc in [(ProjectFilesNotFoundError, 10),
     ERROR_CODES[repr(_error)] = _rc
 
 
+def errorcode(error):
+    """Get the error exit code from an exception ``error``
+
+    :param error: exception instance
+    :return: exit code
+    :rtype: int
+    """
+    return ERROR_CODES.get(repr(type(error)), 255)
+
+
 #: Prefix to namespace mappings
 NSMAP = dict(db="http://docbook.org/ns/docbook",
              # Schematron namespace
