@@ -43,7 +43,7 @@ from logging.config import dictConfig
 from lxml import etree
 
 from .common import (DEFAULT_LOGGING_DICT,
-                     errorcode, LOGLEVELS, LOGNAMES
+                     errorcode, LOGLEVELS,
                      )
 from .exceptions import (NoISOSchematronFileError,
                          OldSchematronError,
