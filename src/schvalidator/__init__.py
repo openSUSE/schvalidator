@@ -28,7 +28,7 @@ Validates an XML file with a Schematron schema
 import logging
 
 
-__version__ = "0.1.1"  # flake8: noqa
+__version__ = "0.2.0"  # flake8: noqa
 __author__ = "Thomas Schraitle"  # flake8: noqa
 __proc__ = "schvalidator"
 __url__ = "https://github.com/openSUSE/schvalidator"

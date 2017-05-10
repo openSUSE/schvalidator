@@ -23,7 +23,7 @@ from setuptools import setup, find_packages
 
 setupdict = dict(
    name='schvalidator',
-   version='0.1.1',
+   version='0.2.0',
    description='Schematron Validator',
    url='https://github.com/openSUSE/schvalidator',
    # Author details
