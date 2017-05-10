@@ -16,21 +16,16 @@
 # To contact SUSE about this file by physical or electronic mail,
 # you may find current contact information at www.suse.com
 
-from .common import ROLEDICT
+from .common import NSMAP, OLD_SCHEMA_TAG, ROLEDICT, SCHEMA_TAG
+from .exceptions import (OldSchematronError,
+                         NoISOSchematronFileError,
+                         )
+
 import logging
 from lxml import etree
 from lxml.isoschematron import Schematron
 
 log = logging.getLogger(__name__)
-
-
-# Common namespaces
-NS = dict(svrl="http://purl.oclc.org/dsdl/svrl",
-          xs="http://www.w3.org/2001/XMLSchema",
-          sch="http://www.ascc.net/xml/schematron",
-          iso="http://purl.oclc.org/dsdl/schematron",
-          d="http://docbook.org/ns/docbook"
-          )
 
 
 class NSElement(object):
@@ -55,7 +50,7 @@ class NSElement(object):
         return result
 
 
-svrl = NSElement(NS['svrl'])
+svrl = NSElement(NSMAP['svrl'])
 
 
 def role2level(rolelevel):
@@ -64,6 +59,28 @@ def role2level(rolelevel):
     :return: int
     """
     return ROLEDICT.get(rolelevel)
+
+
+def check4schematron(schema, xmlparser=None):
+    """Check if file is a ISO Schematron schema
+
+    :param str schema: Filename of the Schematron schema
+    :param xmlparser: :class:`etree.XMLParser` object
+    :raises: OldSchematronError or NoISOSchematronFileError
+    """
+    schtree = etree.parse(schema, parser=xmlparser)
+    roottag = schtree.getroot().tag
+    log.debug("Found root element: %r", roottag)
+
+    if roottag == OLD_SCHEMA_TAG:
+        raise OldSchematronError("File %r is an old Schematron schema."
+                                 "This program supports only ISO Schematron" %
+                                 schema)
+    elif roottag != SCHEMA_TAG:
+        raise NoISOSchematronFileError('File %r not an ISO Schematron' %
+                                       schema)
+    # After this point, everything is ok now
+    return schtree
 
 
 def validate_sch(schema, xmlfile, phase=None, xmlparser=None):
@@ -77,15 +94,18 @@ def validate_sch(schema, xmlfile, phase=None, xmlparser=None):
              Schematron result tree as class :class:`etree._XSLTResultTree`
     :rtype: tuple
     """
+    log.debug("Try to validate XML=%r with SCH=%r", xmlfile, schema)
     if xmlparser is None:
         # Use our default XML parser:
         xmlparser = etree.XMLParser(encoding="UTF-8",
                                     no_network=True,
                                     )
     doctree = etree.parse(xmlfile, parser=xmlparser)
+    schema = check4schematron(schema, xmlparser)
+
     log.debug("Schematron validation with file=%r, schema=%r, phase=%r",
               xmlfile, schema, phase)
-    schematron = Schematron(file=schema,
+    schematron = Schematron(schema,
                             phase=phase,
                             store_report=True,
                             store_xslt=True)

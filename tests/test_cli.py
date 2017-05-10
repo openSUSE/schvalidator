@@ -25,7 +25,10 @@ from unittest.mock import patch
 import schvalidator
 from schvalidator.cli import parsecli
 from schvalidator.common import ERROR_CODES
-from schvalidator.exceptions import ProjectFilesNotFoundError
+from schvalidator.exceptions import (NoISOSchematronFileError,
+                                     OldSchematronError,
+                                     ProjectFilesNotFoundError,
+                                     )
 
 TESTDIR = py.path.local(__file__).dirpath()
 DATADIR = TESTDIR / "data"
@@ -141,3 +144,34 @@ def test_main_raise_OSError(monkeypatch, excpt):
 
     result = schvalidator.cli.main()
     assert result == ERROR_CODES[excpt]
+
+
+
+def test_oldschematron(monkeypatch):
+
+    def _parsecli(cliargs=None):
+        return {'SCHEMA': str(DATADIR / "old-schematron.sch"),
+                'XMLFILE': str(DATADIR / "article-001.xml"),
+                '--phase': None,
+                }
+    monkeypatch.setattr(schvalidator.cli,
+                        'parsecli',
+                        _parsecli)
+
+    result = schvalidator.cli.main()
+    assert result == ERROR_CODES[OldSchematronError]
+
+
+def test_isoschematron(monkeypatch):
+
+    def _parsecli(cliargs=None):
+        return {'SCHEMA': str(DATADIR / "article-001.xml"),
+                'XMLFILE': str(DATADIR / "article-001.xml"),
+                '--phase': None,
+                }
+    monkeypatch.setattr(schvalidator.cli,
+                        'parsecli',
+                        _parsecli)
+
+    result = schvalidator.cli.main()
+    assert result == ERROR_CODES[NoISOSchematronFileError]

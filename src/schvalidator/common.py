@@ -16,7 +16,10 @@
 # To contact SUSE about this file by physical or electronic mail,
 # you may find current contact information at www.suse.com
 
-from .exceptions import ProjectFilesNotFoundError
+from .exceptions import (NoISOSchematronFileError,
+                         OldSchematronError,
+                         ProjectFilesNotFoundError,
+                         )
 from logging import (BASIC_FORMAT,
                      CRITICAL,
                      DEBUG,
@@ -27,14 +30,20 @@ from logging import (BASIC_FORMAT,
                      WARN,
                      WARNING,
                      )
-from lxml.etree import (SchematronParseError,
+from lxml.etree import (QName,
+                        SchematronParseError,
                         XMLSyntaxError,
                         XSLTApplyError,
                         XSLTParseError,
                         )
 
 
-__all__ = ['ERROR_CODES']
+__all__ = ['DEFAULT_LOGGING_DICT',
+           'ERROR_CODES',
+           'LOGLEVELS', 'LOGNAMES',
+           'NSMAP',
+           'SCHEMA_TAG',
+           ]
 
 
 # Error codes
@@ -48,9 +57,27 @@ for _error, _rc in [(ProjectFilesNotFoundError, 10),
                     (XSLTParseError, 30),
                     (FileNotFoundError, 40),
                     (OSError, 40),
+                    (NoISOSchematronFileError, 50),
+                    (OldSchematronError, 51),
                     ]:
     ERROR_CODES[_error] = _rc
     ERROR_CODES[repr(_error)] = _rc
+
+
+#: Prefix to namespace mappings
+NSMAP = dict(db="http://docbook.org/ns/docbook",
+             # Schematron namespace
+             s="http://purl.oclc.org/dsdl/schematron",
+             # Obsolete, deprecated namespace of old Schematron
+             oldsch="http://www.ascc.net/xml/schematron",
+             # Schematron Validation Report namespace
+             svrl="http://purl.oclc.org/dsdl/svrl",
+             # XML Schema namespace
+             xs="http://www.w3.org/2001/XMLSchema",
+             )
+
+SCHEMA_TAG = QName(NSMAP['s'], 'schema')
+OLD_SCHEMA_TAG = QName(NSMAP['oldsch'], 'schema')
 
 
 #: Map verbosity to log levels

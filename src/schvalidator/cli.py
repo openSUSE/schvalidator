@@ -42,8 +42,13 @@ import logging
 from logging.config import dictConfig
 from lxml import etree
 
-from .common import DEFAULT_LOGGING_DICT, ERROR_CODES, LOGLEVELS, LOGNAMES
-from .exceptions import ProjectFilesNotFoundError
+from .common import (DEFAULT_LOGGING_DICT,
+                     ERROR_CODES, LOGLEVELS, LOGNAMES
+                     )
+from .exceptions import (NoISOSchematronFileError,
+                         OldSchematronError,
+                         ProjectFilesNotFoundError,
+                         )
 from .schematron import process
 
 #: Use __package__, not __name__ here to set overall logging level:
@@ -111,5 +116,10 @@ def main(cliargs=None):
         return ERROR_CODES.get(type(error), 255)
 
     except (FileNotFoundError, OSError) as error:
+        log.fatal(error)
+        return ERROR_CODES.get(repr(type(error)), 255)
+
+    except (NoISOSchematronFileError, OldSchematronError) as error:
+        # print(repr(error))
         log.fatal(error)
         return ERROR_CODES.get(repr(type(error)), 255)
