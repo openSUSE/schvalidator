@@ -50,7 +50,7 @@ def test_NSElement():
 def test_process(monkeypatch, tmpdir,
                  validation_result, return_value, reportfile):
     """Test process() function"""
-    args = {'--schema': None,
+    args = {'SCHEMA': None,
             'XMLFILE':  None,
             '--phase':  None,
             '--report': str(tmpdir / reportfile) \

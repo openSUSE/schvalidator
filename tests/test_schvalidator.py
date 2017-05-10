@@ -43,8 +43,8 @@ def test_main(capsys):
 def test_main_with_exception(mock_check_files, mock_parsecli,
                              schema, xmlfile):
     mock_check_files.return_value = None
-    mock_parsecli.return_value = {'--schema': schema, 'XMLFILE': xmlfile, '--phase': None}
-    result = schvalidator.cli.main(["", "--schema", "schema.sch"])
+    mock_parsecli.return_value = {'SCHEMA': schema, 'XMLFILE': xmlfile, '--phase': None}
+    result = schvalidator.cli.main(["", "schema.sch"])
     #
     assert result == ERROR_CODES[FileNotFoundError]
 

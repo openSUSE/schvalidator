@@ -32,33 +32,33 @@ DATADIR = TESTDIR / "data"
 
 
 @pytest.mark.parametrize('cli,expected', [
-  (['--schema', 'schema.sch', 'a.xml'],
-   {'--schema': 'schema.sch',
+  ([ 'schema.sch', 'a.xml'],
+   {'SCHEMA': 'schema.sch',
     'XMLFILE':  'a.xml'}
    ),
-  (['-v', '--schema', 'schema.sch', 'a.xml'],
+  (['-v', 'schema.sch', 'a.xml'],
    {'-v': 1,
-    '--schema': 'schema.sch',
+    'SCHEMA': 'schema.sch',
     'XMLFILE':  'a.xml'}
    ),
-  (['-vv', '--schema', 'schema.sch', 'a.xml'],
+  (['-vv', 'schema.sch', 'a.xml'],
    {'-v': 2,
-    '--schema': 'schema.sch',
+    'SCHEMA': 'schema.sch',
     'XMLFILE':  'a.xml'}
    ),
-  (['-vvv', '--schema', 'schema.sch', 'a.xml'],
+  (['-vvv', 'schema.sch', 'a.xml'],
    {'-v': 3,
-    '--schema': 'schema.sch',
+    'SCHEMA': 'schema.sch',
     'XMLFILE':  'a.xml'}
    ),
-  (['--report', 'report.svrl', '--schema', 'schema.sch', 'a.xml'],
+  (['--report', 'report.svrl', 'schema.sch', 'a.xml'],
    {'--report': 'report.svrl',
-    '--schema': 'schema.sch',
+    'SCHEMA': 'schema.sch',
     'XMLFILE':  'a.xml'}
    ),
-   (['--phase', 'foo', '--schema', 'schema.sch', 'a.xml'],
+   (['--phase', 'foo', 'schema.sch', 'a.xml'],
    {'--phase': 'foo',
-    '--schema': 'schema.sch',
+    'SCHEMA': 'schema.sch',
     'XMLFILE':  'a.xml'}
    ),
 ])
@@ -71,7 +71,7 @@ def test_parsecli(cli, expected):
 def test_main_mock_parsecli(monkeypatch):
     """ """
     def mock_parsecli(cliargs=None):
-        return {'--schema': None,
+        return {'SCHEMA': None,
                 'XMLFILE':  None,
                 }
 
@@ -86,7 +86,7 @@ def test_main_mock_parsecli(monkeypatch):
 def test_main_mock_parsecli_process(monkeypatch):
     """ """
     def mock_parsecli(cliargs=None):
-        return {'--schema': "s.sch",
+        return {'SCHEMA': "s.sch",
                 '--phase': None,
                 'XMLFILE':  "a.xml",
                 }
@@ -125,7 +125,7 @@ def test_main_raise_etree(mock_check_files, mock_parsecli, mock_process,
 ])
 def test_main_raise_OSError(monkeypatch, excpt):
     def mock_parsecli(cliargs=None):
-        return {'--schema': "s.sch",
+        return {'SCHEMA': "s.sch",
                 '--phase': None,
                 'XMLFILE':  "a.xml",
                 }

@@ -21,7 +21,7 @@ Validates XML files with Schematron schemas
 
 Usage:
     schvalidator [-h | --help]
-    schvalidator [-v ...] [options] --schema SCHEMA XMLFILE
+    schvalidator [-v ...] [options] SCHEMA XMLFILE
 
 Options:
     -h, --help      Shows this help
@@ -30,8 +30,9 @@ Options:
     --report REPORTFILE
                     save output of Schematron validation to REPORTFILE
     --phase PHASE   a validation phase
-    --schema SCHEMA
-                    Points to the Schematron file
+
+Arguments:
+    SCHEMA          Path to the Schematron file
     XMLFILE         Path to the XML file to validate
 """
 
@@ -72,7 +73,7 @@ def check_files(args):
     :param dict args: Dictionary from docopt
     """
     for f, msg in ((args['XMLFILE'], "Need a XML file."),
-                   (args['--schema'], "Need a Schematron schema.")):
+                   (args['SCHEMA'], "Need a Schematron schema.")):
         if f is None:
             print(__doc__)
             raise ProjectFilesNotFoundError(msg)
@@ -101,7 +102,7 @@ def main(cliargs=None):
         return ERROR_CODES.get(repr(type(error)), 255)
 
     # except etree.SchematronParseError as error:
-    #    log.fatal("Schematron file %r error", args['--schema'])
+    #    log.fatal("Schematron file %r error", args['SCHEMA'])
     #    log.fatal(error)
     #    return ERROR_CODES.get(repr(type(error)), 255)
 

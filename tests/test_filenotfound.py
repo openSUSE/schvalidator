@@ -7,7 +7,7 @@ from schvalidator.exceptions import ProjectFilesNotFoundError
 
 def test_filenotfound1():
     #
-    args = {'--schema': 'schema-does-not-exist.sch',
+    args = {'SCHEMA': 'schema-does-not-exist.sch',
             '--phase': None,
             'XMLFILE': 'file-does-not-exist.xml'}
 
@@ -19,6 +19,6 @@ def test_filenotfound2():
     #
     from schvalidator.cli import main
 
-    result = main(['--schema', 'schema-does-not-exist.sch',
+    result = main(['schema-does-not-exist.sch',
               'file-does-not-exist.xml'])
     assert result == ERROR_CODES[FileNotFoundError]

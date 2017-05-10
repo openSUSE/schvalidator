@@ -142,7 +142,7 @@ def process(args):
     :return: return exit value
     :rtype: int
     """
-    result, schematron = validate_sch(args['--schema'],
+    result, schematron = validate_sch(args['SCHEMA'],
                                       args['XMLFILE'],
                                       phase=args['--phase'],
                                       )
