@@ -11,7 +11,7 @@ Synopsis
 --------
 ::
 
- schvalidator [OPTIONS] --schema SCHEMA XMLFILE
+ schvalidator [OPTIONS] SCHEMA XMLFILE
 
 
 Description
@@ -64,7 +64,7 @@ Options
 
    Set a validation phase
 
-.. option:: --schema <SCHEMA>
+.. option:: SCHEMA
 
    Points to the Schematron file
 
@@ -110,7 +110,7 @@ Your DocBook 5 source is saved in file :file:`article.xml`:
 
 Run the script :program:`schvalidator` like this::
 
-    $ schvalidator --schema root.sch article.xml
+    $ schvalidator root.sch article.xml
 
 it gives you the following output::
 
