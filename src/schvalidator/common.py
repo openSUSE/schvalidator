@@ -141,7 +141,7 @@ DEFAULT_LOGGING_DICT = {
         },
     },
     'loggers': {
-        'schvalidator': {
+        __package__: {
             'handlers': ['default'],
             'level': 'INFO',
             'propagate': True
