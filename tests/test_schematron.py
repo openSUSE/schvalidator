@@ -128,13 +128,13 @@ def test_process_result_svrl(caplog):
   </svrl:failed-assert>
 </svrl:schematron-output>""")
 
-    log = logging.getLogger('schvalidator')
+    log = logging.getLogger(schvalidator.__package__)
     log.setLevel(logging.INFO)
     process_result_svrl(xmltree)
     # assert caplog.text
     for record in caplog.records:
         assert record.levelname == 'INFO'
-        assert record.name == 'schvalidator.schematron'
+        assert record.name == schvalidator.__package__
         assert record.getMessage()
         assert record.funcName == process_result_svrl.__name__
 

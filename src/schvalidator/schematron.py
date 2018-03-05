@@ -25,7 +25,7 @@ import logging
 from lxml import etree
 from lxml.isoschematron import Schematron
 
-log = logging.getLogger(__name__)
+log = logging.getLogger(__package__)
 
 
 class NSElement(object):
