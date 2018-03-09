@@ -177,6 +177,15 @@ def process(args):
     else:
         log.debug(schematron.validation_report)
 
+    #
+    xsltfile = args['--store-xslt']
+    if xsltfile is not None:
+        schematron.validator_xslt.write(xsltfile,
+                                        pretty_print=True,
+                                        encoding="utf-8",
+                                        )
+        log.info("Wrote validation XSLT file to %r", xsltfile)
+
     process_result_svrl(schematron.validation_report)
 
     if not result:

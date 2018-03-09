@@ -27,6 +27,8 @@ Options:
     -h, --help      Shows this help
     -v              Raise verbosity level
     --version       Prints the version
+    --store-xslt XSLTFILE
+                    save the validation XSLT tree to XSLTFILE
     --report REPORTFILE
                     save output of Schematron validation to REPORTFILE
     --phase PHASE   a validation phase

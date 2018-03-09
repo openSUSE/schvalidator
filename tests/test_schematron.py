@@ -54,6 +54,7 @@ def test_process(monkeypatch, tmpdir,
     args = {'SCHEMA': None,
             'XMLFILE':  None,
             '--phase':  None,
+            '--store-xslt': None,
             '--report': str(tmpdir / reportfile) \
                         if reportfile is not None else None
             }
@@ -67,6 +68,34 @@ def test_process(monkeypatch, tmpdir,
                         mockreturn)
 
     assert process(args) == return_value
+
+
+@pytest.mark.parametrize('xsltfile', [None, "result.xslt"])
+def test_process_store_xslt(monkeypatch, tmpdir,
+                            xsltfile):
+    args = {'SCHEMA': None,
+            'XMLFILE':  None,
+            '--phase':  None,
+            '--report': None,
+            '--store-xslt': str(tmpdir / xsltfile) \
+                            if xsltfile is not None else None
+            }
+    def mockreturn(schema, xmlfile, phase=None, xmlparser=None):
+        mock = Mock()
+        mock.validation_report = etree.XML("""<svrl:schematron-output
+            xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+            schemaVersion="" title="None"/>""").getroottree()
+        mock.validator_xslt = etree.XML("""<xsl:stylesheet
+            version="1.0"
+            xmlns:xsl="http://www.w3.org/1999/XSL/Transform"/>""").getroottree()
+        return True, mock
+
+    monkeypatch.setattr(schvalidator.schematron,
+                        'validate_sch',
+                        mockreturn)
+    assert process(args) == 0
+    if args['--store-xslt'] is not None:
+        assert os.path.exists(args['--store-xslt'])
 
 
 @pytest.mark.parametrize('role', [

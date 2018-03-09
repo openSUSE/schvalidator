@@ -80,6 +80,11 @@ def test_invalid_errorcode():
     'SCHEMA': 'schema.sch',
     'XMLFILE':  'a.xml'}
    ),
+   (['--store-xslt', 'foo.xsl', 'schema.sch', 'a.xml'],
+    {'--store-xslt': 'foo.xsl',
+     'SCHEMA': 'schema.sch',
+     'XMLFILE':  'a.xml'}
+   ),
 ])
 def test_parsecli(cli, expected):
     result = parsecli(cli)
