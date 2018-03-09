@@ -155,17 +155,13 @@ def process_result_svrl(report):
                 idx, loc, text, "-" * 20)
 
 
-def process(args):
-    """Process the validation and the result
+def save_reportfile(schematron, args):
+    """Save the report file from the --report option
 
+    :param schematron: the Schematron object
+    :type schematron: :class:`lxml.isoschematron.Schematron`
     :param dict args: Dictionary of parsed CLI arguments
-    :return: return exit value
-    :rtype: int
     """
-    result, schematron = validate_sch(args['SCHEMA'],
-                                      args['XMLFILE'],
-                                      phase=args['--phase'],
-                                      )
     reportfile = args['--report']
 
     if reportfile is not None:
@@ -177,7 +173,14 @@ def process(args):
     else:
         log.debug(schematron.validation_report)
 
-    #
+
+def save_xsltfile(schematron, args):
+    """Save the validation XSLT tree from the --store-xslt option
+
+    :param schematron: the Schematron object
+    :type schematron: :class:`lxml.isoschematron.Schematron`
+    :param dict args: Dictionary of parsed CLI arguments
+    """
     xsltfile = args['--store-xslt']
     if xsltfile is not None:
         schematron.validator_xslt.write(xsltfile,
@@ -186,6 +189,20 @@ def process(args):
                                         )
         log.info("Wrote validation XSLT file to %r", xsltfile)
 
+
+def process(args):
+    """Process the validation and the result
+
+    :param dict args: Dictionary of parsed CLI arguments
+    :return: return exit value
+    :rtype: int
+    """
+    result, schematron = validate_sch(args['SCHEMA'],
+                                      args['XMLFILE'],
+                                      phase=args['--phase'],
+                                      )
+    save_reportfile(schematron, args)
+    save_xsltfile(schematron, args)
     process_result_svrl(schematron.validation_report)
 
     if not result:
